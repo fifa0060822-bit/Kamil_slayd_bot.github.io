@@ -3,1223 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Talaba Portali - Referat, Slayd, Kurs Ishi</title>
+    <title>Talaba Bot - AI Akademik Portali</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        :root {
-            --tg-theme-bg-color: #0b1120;
-            --tg-theme-text-color: #f8fafc;
-            --tg-theme-hint-color: #94a3b8;
-            --tg-theme-link-color: #38bdf8;
-            --tg-theme-button-color: #4f46e5;
-            --tg-theme-button-text-color: #ffffff;
-            --tg-theme-secondary-bg-color: #111c33;
-
-            --primary: #6366f1;
-            --primary-light: #818cf8;
-            --primary-glow: rgba(99, 102, 241, 0.4);
-            --gradient-accent: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
-            --gradient-card: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.8) 100%);
-            --border-glass: rgba(255, 255, 255, 0.08);
-            --border-focus: rgba(99, 102, 241, 0.6);
-            --radius-xl: 22px;
-            --radius-lg: 16px;
-            --radius-md: 12px;
-            --radius-sm: 8px;
-            --speed: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--tg-theme-bg-color);
-            color: var(--tg-theme-text-color);
-            min-height: 100vh;
-            padding-bottom: 96px;
-            line-height: 1.45;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        .app-container {
-            max-width: 460px;
-            margin: 0 auto;
-            padding: 14px 16px;
-        }
-
-        /* ========== HERO HEADER ========== */
-        .hero {
-            text-align: center;
-            padding: 16px 0 20px;
-            position: relative;
-        }
-
-        .badge-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 12px;
-            border-radius: 999px;
-            background: rgba(99, 102, 241, 0.15);
-            border: 1px solid rgba(99, 102, 241, 0.35);
-            color: #a5b4fc;
-            font-size: 0.72rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            margin-bottom: 8px;
-        }
-
-        .badge-pill span.pulse-dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: #22c55e;
-            box-shadow: 0 0 8px #22c55e;
-        }
-
-        .hero-title {
-            font-size: 1.6rem;
-            font-weight: 800;
-            background: var(--gradient-accent);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.02em;
-            margin-bottom: 4px;
-        }
-
-        .hero-desc {
-            font-size: 0.82rem;
-            color: var(--tg-theme-hint-color);
-            font-weight: 500;
-        }
-
-        /* ========== GLASS CARD ========== */
-        .g-card {
-            background: var(--gradient-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-glass);
-            border-radius: var(--radius-xl);
-            padding: 16px;
-            margin-bottom: 14px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-            transition: var(--speed);
-        }
-
-        .label-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .label-title {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--tg-theme-hint-color);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-
-        .label-title svg {
-            color: #818cf8;
-        }
-
-        .label-tag {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: #818cf8;
-            background: rgba(99, 102, 241, 0.1);
-            padding: 3px 8px;
-            border-radius: 6px;
-        }
-
-        /* ========== LANGUAGE SWITCHER ========== */
-        .lang-row {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 6px;
-        }
-
-        .lang-chip {
-            padding: 8px 2px;
-            border-radius: var(--radius-sm);
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-glass);
-            color: var(--tg-theme-hint-color);
-            font-size: 0.73rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-align: center;
-            transition: var(--speed);
-        }
-
-        .lang-chip.active {
-            background: var(--primary);
-            color: #ffffff;
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px var(--primary-glow);
-        }
-
-        /* ========== 3 MAIN DOC TYPE CARDS (TABS) ========== */
-        .doc-types-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .doc-card {
-            padding: 14px 8px;
-            border-radius: var(--radius-lg);
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid transparent;
-            cursor: pointer;
-            text-align: center;
-            transition: var(--speed);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            position: relative;
-        }
-
-        .doc-card:active {
-            transform: scale(0.96);
-        }
-
-        .doc-card.active {
-            background: rgba(99, 102, 241, 0.15);
-            border-color: #818cf8;
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.25);
-        }
-
-        .doc-card-icon {
-            font-size: 1.6rem;
-            line-height: 1;
-            margin-bottom: 2px;
-        }
-
-        .doc-card-name {
-            font-size: 0.85rem;
-            font-weight: 800;
-            color: #ffffff;
-        }
-
-        .doc-card-sub {
-            font-size: 0.68rem;
-            color: var(--tg-theme-hint-color);
-            font-weight: 600;
-        }
-
-        /* Admin Link Bar */
-        .admin-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 11px 14px;
-            border-radius: var(--radius-md);
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(168, 85, 247, 0.12) 100%);
-            border: 1px solid rgba(236, 72, 153, 0.25);
-            text-decoration: none;
-            transition: var(--speed);
-        }
-
-        .admin-bar:active {
-            transform: scale(0.98);
-        }
-
-        .admin-bar-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .admin-bar-left span.icon { font-size: 1.25rem; }
-        .admin-bar-left span.text { font-size: 0.82rem; font-weight: 700; color: #fdf2f8; }
-        .admin-bar-right {
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: #f472b6;
-            background: rgba(236, 72, 153, 0.15);
-            padding: 4px 10px;
-            border-radius: 999px;
-        }
-
-        /* ========== INPUTS ========== */
-        .field-group {
-            margin-bottom: 12px;
-        }
-        .field-group:last-child { margin-bottom: 0; }
-
-        .field-label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--tg-theme-hint-color);
-            margin-bottom: 6px;
-        }
-
-        .custom-input {
-            width: 100%;
-            padding: 12px 14px;
-            background: rgba(11, 17, 32, 0.7);
-            border: 1.5px solid var(--border-glass);
-            border-radius: var(--radius-md);
-            color: #ffffff;
-            font-family: inherit;
-            font-size: 0.92rem;
-            font-weight: 500;
-            outline: none;
-            transition: var(--speed);
-        }
-
-        .custom-input:focus {
-            border-color: #818cf8;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-            background: rgba(15, 23, 42, 0.9);
-        }
-
-        .custom-input::placeholder { color: #475569; }
-
-        /* ========== PAGE PILLS ========== */
-        .pills-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 7px;
-        }
-
-        .pill {
-            flex: 1;
-            min-width: calc(20% - 6px);
-            padding: 10px 4px;
-            border-radius: var(--radius-sm);
-            background: rgba(255, 255, 255, 0.04);
-            border: 1.5px solid var(--border-glass);
-            color: var(--tg-theme-text-color);
-            font-size: 0.88rem;
-            font-weight: 700;
-            cursor: pointer;
-            text-align: center;
-            transition: var(--speed);
-        }
-
-        .pill:active { transform: scale(0.95); }
-
-        .pill.active {
-            background: var(--gradient-accent);
-            color: #ffffff;
-            border-color: transparent;
-            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
-        }
-
-        /* ========== DESIGN TEMPLATES (6 XIL MUKAMMAL DIZAYN) ========== */
-        .designs-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-
-        .design-tile {
-            padding: 10px 6px;
-            border-radius: var(--radius-md);
-            background: rgba(255, 255, 255, 0.03);
-            border: 2px solid transparent;
-            cursor: pointer;
-            text-align: center;
-            transition: var(--speed);
-        }
-
-        .design-tile:active { transform: scale(0.95); }
-
-        .design-tile.active {
-            border-color: #a855f7;
-            background: rgba(168, 85, 247, 0.15);
-            box-shadow: 0 4px 16px rgba(168, 85, 247, 0.2);
-        }
-
-        .tile-canvas {
-            height: 44px;
-            border-radius: 6px;
-            margin-bottom: 6px;
-            padding: 7px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 4px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .t-line { height: 3.5px; border-radius: 2px; }
-
-        /* 1. Minimalist */
-        .tile-canvas.minimalist { background: #ffffff; }
-        .tile-canvas.minimalist .t-line.top { background: #3b82f6; width: 65%; }
-        .tile-canvas.minimalist .t-line.bottom { background: #94a3b8; width: 45%; }
-
-        /* 2. Corporate */
-        .tile-canvas.corporate { background: #0f172a; }
-        .tile-canvas.corporate .t-line.top { background: #38bdf8; width: 75%; }
-        .tile-canvas.corporate .t-line.bottom { background: #64748b; width: 50%; }
-
-        /* 3. Creative */
-        .tile-canvas.creative { background: #500724; }
-        .tile-canvas.creative .t-line.top { background: #f472b6; width: 80%; }
-        .tile-canvas.creative .t-line.bottom { background: #fb7185; width: 40%; }
-
-        /* 4. Dark */
-        .tile-canvas.dark { background: #030712; }
-        .tile-canvas.dark .t-line.top { background: #a855f7; width: 70%; }
-        .tile-canvas.dark .t-line.bottom { background: #6366f1; width: 50%; }
-
-        /* 5. Emerald */
-        .tile-canvas.emerald { background: #064e3b; }
-        .tile-canvas.emerald .t-line.top { background: #34d399; width: 75%; }
-        .tile-canvas.emerald .t-line.bottom { background: #059669; width: 45%; }
-
-        /* 6. Sunset */
-        .tile-canvas.sunset { background: #451a03; }
-        .tile-canvas.sunset .t-line.top { background: #fbbf24; width: 80%; }
-        .tile-canvas.sunset .t-line.bottom { background: #f97316; width: 50%; }
-
-        .tile-name {
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* ========== GENERATE BUTTON ========== */
-        .cta-btn {
-            width: 100%;
-            padding: 16px 20px;
-            font-size: 1.05rem;
-            font-weight: 800;
-            font-family: inherit;
-            color: #ffffff;
-            background: var(--gradient-accent);
-            border: none;
-            border-radius: var(--radius-xl);
-            cursor: pointer;
-            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.45);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: var(--speed);
-        }
-
-        .cta-btn:active { transform: scale(0.97); }
-
-        /* ========== LIVE PROGRESS OVERLAY MODAL ========== */
-        .progress-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(11, 17, 32, 0.94);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            z-index: 9999;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: modalFade 0.25s ease;
-        }
-
-        @keyframes modalFade {
-            from { opacity: 0; transform: scale(0.96); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .modal-card {
-            width: 100%;
-            max-width: 380px;
-            background: #111c33;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: var(--radius-xl);
-            padding: 24px 20px;
-            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
-            text-align: center;
-        }
-
-        .modal-title {
-            font-size: 1.25rem;
-            font-weight: 800;
-            margin-bottom: 4px;
-            background: var(--gradient-accent);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .modal-subtitle {
-            font-size: 0.8rem;
-            color: var(--tg-theme-hint-color);
-            margin-bottom: 22px;
-        }
-
-        /* 4 Step Items */
-        .stage-list {
-            display: flex;
-            flex-direction: column;
-            gap: 11px;
-            text-align: left;
-            margin-bottom: 22px;
-        }
-
-        .stage-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
-            border-radius: var(--radius-md);
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-glass);
-            transition: var(--speed);
-        }
-
-        .stage-row.pending { opacity: 0.4; }
-        .stage-row.active {
-            opacity: 1;
-            background: rgba(99, 102, 241, 0.14);
-            border-color: rgba(99, 102, 241, 0.5);
-            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.2);
-        }
-        .stage-row.completed {
-            opacity: 1;
-            background: rgba(34, 197, 94, 0.1);
-            border-color: rgba(34, 197, 94, 0.35);
-        }
-
-        .stage-icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            flex-shrink: 0;
-        }
-
-        .stage-row.active .stage-icon {
-            animation: spinRotate 1.2s linear infinite;
-        }
-
-        @keyframes spinRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .stage-label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .stage-row.completed .stage-label { color: #4ade80; }
-
-        .bar-track {
-            width: 100%;
-            height: 7px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 999px;
-            overflow: hidden;
-        }
-
-        .bar-gauge {
-            height: 100%;
-            width: 10%;
-            background: var(--gradient-accent);
-            border-radius: 999px;
-            transition: width 0.35s ease;
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #ef4444;
-            color: white;
-            padding: 10px 18px;
-            border-radius: var(--radius-md);
-            font-size: 0.82rem;
-            font-weight: 700;
-            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
-            z-index: 10001;
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app-container">
+    <div class="container">
         <!-- Hero Header -->
-        <header class="hero">
-            <div class="badge-pill">
-                <span class="pulse-dot"></span>
-                <span>AI TALABA HUB • GEMINI 3.8</span>
+        <header class="hero-banner">
+            <div class="hero-chip">
+                <span class="pulse-green"></span>
+                <span>AI TALABA HUB • GEMINI + UNSPLASH</span>
             </div>
             <h1 class="hero-title" data-i18n="heroTitle">Talaba Akademik Portali</h1>
             <p class="hero-desc" data-i18n="heroDesc">Referat, Kurs ishi va Slaydlarni professional tarzda yarating</p>
         </header>
 
         <!-- 1. Til tanlash -->
-        <section class="g-card">
-            <div class="label-row">
-                <div class="label-title">
+        <section class="box-card">
+            <div class="card-header-row">
+                <div class="card-header-title">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                    <span data-i18n="langLabel">Til / Language</span>
+                    <span data-i18n="langTitle">Til / Language</span>
                 </div>
             </div>
-            <div class="lang-row" id="langRow">
-                <button class="lang-chip active" data-lang="uz">O'zbek</button>
-                <button class="lang-chip" data-lang="uz_cyrl">Ўзбек</button>
-                <button class="lang-chip" data-lang="ru">Русский</button>
-                <button class="lang-chip" data-lang="kaa">Qaraqalpaq</button>
-                <button class="lang-chip" data-lang="en">English</button>
+            <div class="lang-pills" id="langPills">
+                <button class="lang-btn active" data-lang="uz">O'zbek</button>
+                <button class="lang-btn" data-lang="uz_cyrl">Ўзбек</button>
+                <button class="lang-btn" data-lang="ru">Русский</button>
+                <button class="lang-btn" data-lang="kaa">Qaraqalpaq</button>
+                <button class="lang-btn" data-lang="en">English</button>
             </div>
         </section>
 
-        <!-- 2. Hujjat turini tanlash (Referat, Slayd, Kurs ishi) -->
-        <section class="g-card">
-            <div class="label-row">
-                <div class="label-title">
+        <!-- 2. Hujjat turi -->
+        <section class="box-card">
+            <div class="card-header-row">
+                <div class="card-header-title">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                    <span data-i18n="typeLabel">Hujjat Turini Tanlang</span>
+                    <span data-i18n="docTypeTitle">Hujjat Turini Tanlang</span>
                 </div>
-                <span class="label-tag" id="currentDocBadge">Word (.docx)</span>
+                <span class="card-header-badge" id="formatBadge">Word (.docx)</span>
             </div>
 
-            <div class="doc-types-grid" id="docTypesGrid">
+            <div class="type-grid" id="typeGrid">
                 <!-- Referat -->
-                <div class="doc-card active" data-type="referat">
-                    <span class="doc-card-icon">📝</span>
-                    <span class="doc-card-name" data-i18n="tReferat">Referat</span>
-                    <span class="doc-card-sub" data-i18n="subReferat">10-15 bet Word</span>
+                <div class="type-tab active" data-type="referat">
+                    <span class="type-icon">📝</span>
+                    <span class="type-name" data-i18n="tReferat">Referat</span>
+                    <span class="type-sub" data-i18n="sReferat">10-15 bet Word</span>
                 </div>
-
                 <!-- Slayd -->
-                <div class="doc-card" data-type="slayd">
-                    <span class="doc-card-icon">📊</span>
-                    <span class="doc-card-name" data-i18n="tSlayd">Slayd</span>
-                    <span class="doc-card-sub" data-i18n="subSlayd">5-30 ta PPTX</span>
+                <div class="type-tab" data-type="slayd">
+                    <span class="type-icon">📊</span>
+                    <span class="type-name" data-i18n="tSlayd">Slayd</span>
+                    <span class="type-sub" data-i18n="sSlayd">5-30 ta PPTX</span>
                 </div>
-
                 <!-- Kurs ishi -->
-                <div class="doc-card" data-type="kurs_ishi">
-                    <span class="doc-card-icon">📚</span>
-                    <span class="doc-card-name" data-i18n="tKurs">Kurs ishi</span>
-                    <span class="doc-card-sub" data-i18n="subKurs">40-60 bet Word</span>
+                <div class="type-tab" data-type="kurs_ishi">
+                    <span class="type-icon">📚</span>
+                    <span class="type-name" data-i18n="tKurs">Kurs ishi</span>
+                    <span class="type-sub" data-i18n="sKurs">40-60 bet Word</span>
                 </div>
             </div>
 
-            <!-- Adminga murojaat havolasi -->
-            <a class="admin-bar" href="https://t.me/kamokuz" target="_blank">
-                <div class="admin-bar-left">
-                    <span class="icon">👨‍💻</span>
-                    <span class="text" data-i18n="adminLink">Savollar bo'yicha adminga bog'lanish</span>
+            <!-- Adminga Murojaat -->
+            <a href="https://t.me/kamokuz" target="_blank" class="admin-contact-bar">
+                <div class="left">
+                    <span>👨‍💻</span>
+                    <span data-i18n="adminLink">Savollar bo'yicha adminga bog'lanish</span>
                 </div>
-                <span class="admin-bar-right">@kamokuz</span>
+                <div class="right">@kamokuz ↗</div>
             </a>
         </section>
 
-        <!-- 3. Fan va Mavzu kiritish -->
-        <section class="g-card">
-            <div class="label-row">
-                <div class="label-title">
+        <!-- 3. Sifat darajasi (Tier) -->
+        <section class="box-card">
+            <div class="card-header-row">
+                <div class="card-header-title">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    <span data-i18n="tierTitle">Sifat Darajasi (Tier)</span>
+                </div>
+                <span class="card-header-badge" id="tierBadge">Premium 💎</span>
+            </div>
+
+            <div class="tier-grid" id="tierGrid">
+                <!-- Oddiy -->
+                <div class="tier-pill" data-tier="simple">
+                    <span class="tier-name" data-i18n="tierSimple">Oddiy</span>
+                    <span class="tier-sub" data-i18n="subSimple">Oq fon, matn</span>
+                </div>
+                <!-- Standart -->
+                <div class="tier-pill" data-tier="standard">
+                    <span class="tier-name" data-i18n="tierStandard">Standart</span>
+                    <span class="tier-sub" data-i18n="subStandard">Oltin hoshiya</span>
+                </div>
+                <!-- Premium -->
+                <div class="tier-pill premium active" data-tier="premium">
+                    <span class="tier-name" data-i18n="tierPremium">Premium 💎</span>
+                    <span class="tier-sub" data-i18n="subPremium">Unsplash rasmli</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Kontent uslubi (Faqat slayd uchun) -->
+        <section class="box-card" id="styleSection" style="display: none;">
+            <div class="card-header-row">
+                <div class="card-header-title">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg>
+                    <span data-i18n="styleTitle">Kontent Uslubi (Slayd)</span>
+                </div>
+            </div>
+
+            <div class="style-grid" id="styleGrid">
+                <div class="style-option" data-style="text_heavy">
+                    <span class="style-title" data-i18n="styleText">1. Matn ko'proq, rasmlar kamroq</span>
+                    <span class="style-check">✔</span>
+                </div>
+                <div class="style-option active" data-style="balanced">
+                    <span class="style-title" data-i18n="styleBalanced">2. Balanslangan (matn va rasm)</span>
+                    <span class="style-check">✔</span>
+                </div>
+                <div class="style-option" data-style="visual_heavy">
+                    <span class="style-title" data-i18n="styleVisual">3. Rasmlar ko'p, matn qisqa va lo'nda</span>
+                    <span class="style-check">✔</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Ma'lumotlarni kiritish (Mavzu va Fan) -->
+        <section class="box-card">
+            <div class="card-header-row">
+                <div class="card-header-title">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                    <span data-i18n="inputsLabel">Mavzu va Ma'lumotlar</span>
+                    <span data-i18n="inputsTitle">Mavzu va Fan</span>
                 </div>
             </div>
 
-            <div class="field-group">
-                <label class="field-label" data-i18n="lSubject">Fan nomi</label>
-                <input type="text" id="subjectInput" class="custom-input" data-i18n-placeholder="pSubject" placeholder="Masalan: Iqtisodiyot, Tarix, Informatika, Huquq...">
+            <div class="input-wrap">
+                <label class="input-caption" data-i18n="lblSubject">Fan nomi</label>
+                <input type="text" class="field-input" id="subjectInput" data-i18n-placeholder="pSubject" placeholder="Masalan: Iqtisodiyot, Tarix, Informatika, Huquq...">
             </div>
 
-            <div class="field-group">
-                <label class="field-label" data-i18n="lTopic">Mavzu nomi</label>
-                <input type="text" id="topicInput" class="custom-input" data-i18n-placeholder="pTopic" placeholder="Masalan: Raqamli iqtisodiyotning rivojlanish istiqbollari...">
-            </div>
-        </section>
-
-        <!-- 4. Sahifalar / Slaydlar hajmi -->
-        <section class="g-card">
-            <div class="label-row">
-                <div class="label-title">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
-                    <span id="volumeTitle" data-i18n="lVolume">Sahifalar soni</span>
-                </div>
-                <span class="label-tag" id="volumeBadge">15 bet</span>
-            </div>
-            <div class="pills-container" id="pillsContainer"></div>
-        </section>
-
-        <!-- 5. Dizayn tanlash (6 xil mukammal shablon) -->
-        <section class="g-card" id="designSection">
-            <div class="label-row">
-                <div class="label-title">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg>
-                    <span data-i18n="lDesign">Dizayn va Format Uslubi</span>
-                </div>
-                <span class="label-tag">6 xil uslub</span>
-            </div>
-
-            <div class="designs-grid" id="designsGrid">
-                <!-- 1. Minimalist -->
-                <div class="design-tile active" data-design="minimalist">
-                    <div class="tile-canvas minimalist"><div class="t-line top"></div><div class="t-line bottom"></div></div>
-                    <span class="tile-name" data-i18n="dMin">Minimalist ✨</span>
-                </div>
-
-                <!-- 2. Corporate -->
-                <div class="design-tile" data-design="corporate">
-                    <div class="tile-canvas corporate"><div class="t-line top"></div><div class="t-line bottom"></div></div>
-                    <span class="tile-name" data-i18n="dCorp">Korporativ 💼</span>
-                </div>
-
-                <!-- 3. Creative -->
-                <div class="design-tile" data-design="creative">
-                    <div class="tile-canvas creative"><div class="t-line top"></div><div class="t-line bottom"></div></div>
-                    <span class="tile-name" data-i18n="dCreat">Kreativ Neo 🎨</span>
-                </div>
-
-                <!-- 4. Dark -->
-                <div class="design-tile" data-design="dark">
-                    <div class="tile-canvas dark"><div class="t-line top"></div><div class="t-line bottom"></div></div>
-                    <span class="tile-name" data-i18n="dDark">Cyber Dark 🌙</span>
-                </div>
-
-                <!-- 5. Emerald -->
-                <div class="design-tile" data-design="emerald">
-                    <div class="tile-canvas emerald"><div class="t-line top"></div><div class="t-line bottom"></div></div>
-                    <span class="tile-name" data-i18n="dEmerald">Zumrad 🌿</span>
-                </div>
-
-                <!-- 6. Sunset -->
-                <div class="design-tile" data-design="sunset">
-                    <div class="tile-canvas sunset"><div class="t-line top"></div><div class="t-line bottom"></div></div>
-                    <span class="tile-name" data-i18n="dSunset">Oltin Sunset 🌅</span>
-                </div>
+            <div class="input-wrap">
+                <label class="input-caption" data-i18n="lblTopic">Mavzu nomi</label>
+                <input type="text" class="field-input" id="topicInput" data-i18n-placeholder="pTopic" placeholder="Masalan: Raqamli iqtisodiyotning rivojlanish istiqbollari...">
             </div>
         </section>
 
-        <!-- Generate CTA -->
-        <button class="cta-btn" id="ctaBtn">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            <span id="ctaBtnText" data-i18n="btnGenerate">Generatsiya Qilish</span>
+        <!-- 6. Sahifalar soni / Hajm -->
+        <section class="box-card">
+            <div class="card-header-row">
+                <div class="card-header-title">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span id="volumeTitle" data-i18n="lblVolume">Sahifalar soni</span>
+                </div>
+                <span class="card-header-badge" id="volumeBadge">15 bet</span>
+            </div>
+
+            <div class="pills-bar" id="pillsBar">
+                <!-- JS orqali generatsiya qilinadi -->
+            </div>
+        </section>
+
+        <!-- 7. Prezentatsiya Dizayn Shablonlari (Faqat slayd uchun) -->
+        <section class="box-card" id="designSection" style="display: none;">
+            <div class="card-header-row">
+                <div class="card-header-title">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                    <span data-i18n="designTitle">Dizayn Shablonlari</span>
+                </div>
+            </div>
+
+            <div class="palettes-grid" id="palettesGrid">
+                <!-- 1 -->
+                <div class="palette-card active" data-design="minimalist">
+                    <div class="palette-view minimalist">
+                        <div class="bar-mini top"></div>
+                        <div class="bar-mini bot"></div>
+                    </div>
+                    <div class="palette-title" data-i18n="dMin">Minimalist ✨</div>
+                </div>
+                <!-- 2 -->
+                <div class="palette-card" data-design="standard">
+                    <div class="palette-view standard">
+                        <div class="bar-mini top"></div>
+                        <div class="bar-mini bot"></div>
+                    </div>
+                    <div class="palette-title" data-i18n="dStand">Oltin Standart 🟡</div>
+                </div>
+                <!-- 3 -->
+                <div class="palette-card" data-design="corporate">
+                    <div class="palette-view corporate">
+                        <div class="bar-mini top"></div>
+                        <div class="bar-mini bot"></div>
+                    </div>
+                    <div class="palette-title" data-i18n="dCorp">Korporativ 💼</div>
+                </div>
+                <!-- 4 -->
+                <div class="palette-card" data-design="creative">
+                    <div class="palette-view creative">
+                        <div class="bar-mini top"></div>
+                        <div class="bar-mini bot"></div>
+                    </div>
+                    <div class="palette-title" data-i18n="dCreat">Kreativ Neo 🎨</div>
+                </div>
+                <!-- 5 -->
+                <div class="palette-card" data-design="dark">
+                    <div class="palette-view dark">
+                        <div class="bar-mini top"></div>
+                        <div class="bar-mini bot"></div>
+                    </div>
+                    <div class="palette-title" data-i18n="dDark">Cyber Dark 🌙</div>
+                </div>
+                <!-- 6 -->
+                <div class="palette-card" data-design="emerald">
+                    <div class="palette-view emerald">
+                        <div class="bar-mini top"></div>
+                        <div class="bar-mini bot"></div>
+                    </div>
+                    <div class="palette-title" data-i18n="dEmerald">Zumrad 🌿</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Asosiy Tugma -->
+        <button class="submit-btn" id="submitBtn">
+            <span>✨</span>
+            <span data-i18n="btnGenerate">Generatsiya Qilish</span>
         </button>
     </div>
 
-    <!-- JONLI PROGRESS MODAL (Talab qilingan 4 ta bosqich) -->
-    <div class="progress-modal" id="progressModal">
-        <div class="modal-card">
-            <h2 class="modal-title" data-i18n="pModalTitle">Hujjat Yaratilmoqda</h2>
-            <p class="modal-subtitle" id="modalDocInfo">Referat: 15 bet • Gemini 3.8 AI</p>
+    <!-- ========================================================= -->
+    <!-- REAL-TIME WEBSOCKET PROGRESS MODAL (NON-FAKE 4 STAGES)    -->
+    <!-- ========================================================= -->
+    <div class="realtime-modal" id="realtimeModal">
+        <div class="modal-body">
+            <h2 class="modal-heading" data-i18n="modalHead">Hujjat Yaratilmoqda</h2>
+            <p class="modal-sub" id="modalSub">Tayyorlanmoqda...</p>
 
-            <div class="stage-list">
+            <div class="status-rows">
                 <!-- 1 -->
-                <div class="stage-row active" id="st1">
-                    <div class="stage-icon" id="stIcon1">🔁</div>
-                    <span class="stage-label" data-i18n="st1">Ma'lumot izlash...</span>
+                <div class="status-row active" id="row1">
+                    <div class="status-spinner" id="spin1">🔄</div>
+                    <span class="status-text" data-i18n="st1">Status 1: Ma'lumot izlanmoqda va Reja tuzilmoqda...</span>
                 </div>
                 <!-- 2 -->
-                <div class="stage-row pending" id="st2">
-                    <div class="stage-icon" id="stIcon2">🔁</div>
-                    <span class="stage-label" id="st2Label" data-i18n="st2">Ma'lumotlarni hujjatga kiritish jarayoni...</span>
+                <div class="status-row pending" id="row2">
+                    <div class="status-spinner" id="spin2">🔄</div>
+                    <span class="status-text" id="st2Label" data-i18n="st2">Status 2: Matn va rasmlar yig'ilmoqda...</span>
                 </div>
                 <!-- 3 -->
-                <div class="stage-row pending" id="st3">
-                    <div class="stage-icon" id="stIcon3">🔁</div>
-                    <span class="stage-label" data-i18n="st3">Dizaynni to'g'irlash va moslash...</span>
+                <div class="status-row pending" id="row3">
+                    <div class="status-spinner" id="spin3">🔄</div>
+                    <span class="status-text" data-i18n="st3">Status 3: Dizayn va fayl shakllantirilmoqda...</span>
                 </div>
                 <!-- 4 -->
-                <div class="stage-row pending" id="st4">
-                    <div class="stage-icon" id="stIcon4">🔁</div>
-                    <span class="stage-label" data-i18n="st4">Yakuniy bosqich faylni yuklash...</span>
+                <div class="status-row pending" id="row4">
+                    <div class="status-spinner" id="spin4">🔄</div>
+                    <span class="status-text" data-i18n="st4">Status 4: Yakuniy fayl Telegramga yuklanmoqda...</span>
                 </div>
             </div>
 
-            <div class="bar-track">
-                <div class="bar-gauge" id="barGauge"></div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
         </div>
     </div>
 
-    <div class="toast" id="toast">Iltimos, maydonlarni to'ldiring!</div>
+    <div class="toast-msg" id="toastMsg">Iltimos, maydonlarni to'ldiring!</div>
 
-    <script>
-        // ==========================================
-        // TELEGRAM INITIALIZATION
-        // ==========================================
-        const tg = window.Telegram?.WebApp;
-        if (tg) {
-            tg.ready();
-            tg.expand();
-            tg.enableClosingConfirmation();
-        }
-
-        // ==========================================
-        // MULTI-LANGUAGE DICTIONARY (5 TILLAR)
-        // ==========================================
-        const LANG_DATA = {
-            uz: {
-                heroTitle: "Talaba Akademik Portali",
-                heroDesc: "Referat, Kurs ishi va Slaydlarni professional tarzda yarating",
-                langLabel: "Til / Language",
-                typeLabel: "Hujjat Turini Tanlang",
-                tReferat: "Referat",
-                subReferat: "10-15 bet Word",
-                tSlayd: "Slayd",
-                subSlayd: "5-30 ta PPTX",
-                tKurs: "Kurs ishi",
-                subKurs: "40-60 bet Word",
-                adminLink: "Savollar bo'yicha adminga bog'lanish",
-                inputsLabel: "Mavzu va Ma'lumotlar",
-                lSubject: "Fan nomi",
-                pSubject: "Masalan: Iqtisodiyot, Tarix, Informatika, Huquq...",
-                lTopic: "Mavzu nomi",
-                pTopic: "Masalan: Raqamli iqtisodiyotning rivojlanish istiqbollari...",
-                lVolume: "Sahifalar soni",
-                lVolumeSlides: "Slaydlar soni",
-                lDesign: "Dizayn va Format Uslubi",
-                dMin: "Minimalist ✨",
-                dCorp: "Korporativ 💼",
-                dCreat: "Kreativ Neo 🎨",
-                dDark: "Cyber Dark 🌙",
-                dEmerald: "Zumrad 🌿",
-                dSunset: "Oltin Sunset 🌅",
-                btnGenerate: "Generatsiya Qilish",
-                pModalTitle: "Hujjat Yaratilmoqda",
-                st1: "Ma'lumot izlash...",
-                st2: "Ma'lumotlarni hujjatga kiritish jarayoni...",
-                st3: "Dizaynni to'g'irlash va moslash...",
-                st4: "Yakuniy bosqich faylni yuklash...",
-                errSubject: "Fan nomini kiriting!",
-                errTopic: "Mavzu nomini kiriting!"
-            },
-            uz_cyrl: {
-                heroTitle: "Талаба Академик Портали",
-                heroDesc: "Реферат, Курс иши ва Слайдларни профессионал тарзда яратинг",
-                langLabel: "Тил / Language",
-                typeLabel: "Ҳужжат Турини Танланг",
-                tReferat: "Реферат",
-                subReferat: "10-15 бет Word",
-                tSlayd: "Слайд",
-                subSlayd: "5-30 та PPTX",
-                tKurs: "Курс иши",
-                subKurs: "40-60 бет Word",
-                adminLink: "Саволлар бўйича админга боғланиш",
-                inputsLabel: "Мавзу ва Маълумотлар",
-                lSubject: "Фан номи",
-                pSubject: "Масалан: Иқтисодиёт, Тарих, Информатика, Ҳуқуқ...",
-                lTopic: "Мавзу номи",
-                pTopic: "Масалан: Рақамли иқтисодиётнинг ривожланиш истиқболлари...",
-                lVolume: "Саҳифалар сони",
-                lVolumeSlides: "Слайдлар сони",
-                lDesign: "Дизайн ва Формат Услуби",
-                dMin: "Минималист ✨",
-                dCorp: "Корпоратив 💼",
-                dCreat: "Креатив Нео 🎨",
-                dDark: "Cyber Dark 🌙",
-                dEmerald: "Зумрад 🌿",
-                dSunset: "Олтин Sunset 🌅",
-                btnGenerate: "Генерация Қилиш",
-                pModalTitle: "Ҳужжат Яратилмоқда",
-                st1: "Маълумот излаш...",
-                st2: "Маълумотларни ҳужжатга киритиш жараёни...",
-                st3: "Дизайнни тўғирлаш ва мослаш...",
-                st4: "Якуний босқич файлни юклаш...",
-                errSubject: "Фан номини киритинг!",
-                errTopic: "Мавзу номини киритинг!"
-            },
-            ru: {
-                heroTitle: "Студенческий Академический Портал",
-                heroDesc: "Создавайте рефераты, курсовые и презентации профессионально",
-                langLabel: "Язык / Language",
-                typeLabel: "Выберите Тип Документа",
-                tReferat: "Реферат",
-                subReferat: "10-15 стр. Word",
-                tSlayd: "Слайды",
-                subSlayd: "5-30 слайдов PPTX",
-                tKurs: "Курсовая",
-                subKurs: "40-60 стр. Word",
-                adminLink: "Связаться с администратором",
-                inputsLabel: "Тема и Информация",
-                lSubject: "Название предмета",
-                pSubject: "Например: Экономика, История, Право...",
-                lTopic: "Название темы",
-                pTopic: "Например: Перспективы развития цифровой экономики...",
-                lVolume: "Количество страниц",
-                lVolumeSlides: "Количество слайдов",
-                lDesign: "Стиль и Дизайн",
-                dMin: "Минималист ✨",
-                dCorp: "Корпоративный 💼",
-                dCreat: "Креатив Нео 🎨",
-                dDark: "Cyber Dark 🌙",
-                dEmerald: "Изумруд 🌿",
-                dSunset: "Золотой Sunset 🌅",
-                btnGenerate: "Сгенерировать",
-                pModalTitle: "Создание документа",
-                st1: "Поиск информации...",
-                st2: "Внесение информации в документ...",
-                st3: "Настройка и оформление дизайна...",
-                st4: "Финальный этап загрузки файла...",
-                errSubject: "Введите название предмета!",
-                errTopic: "Введите название темы!"
-            },
-            kaa: {
-                heroTitle: "Student Akademiyalıq Portalı",
-                heroDesc: "Referat, Kurs jumısı hám Slaydlardı professional túrde jaratıń",
-                langLabel: "Til / Language",
-                typeLabel: "Hújjet Túrin Saylań",
-                tReferat: "Referat",
-                subReferat: "10-15 bet Word",
-                tSlayd: "Slayd",
-                subSlayd: "5-30 bet PPTX",
-                tKurs: "Kurs jumısı",
-                subKurs: "40-60 bet Word",
-                adminLink: "Sorawlar boyınsha adminge baylanısıw",
-                inputsLabel: "Tema hám Maǵlıwmatlar",
-                lSubject: "Pán atı",
-                pSubject: "Máselen: Ekonomika, Tariyx, Huqıq...",
-                lTopic: "Tema atı",
-                pTopic: "Máselen: Sanlı ekonomikanıń rawajlanıw keleshegi...",
-                lVolume: "Betler sanı",
-                lVolumeSlides: "Slaydlar sanı",
-                lDesign: "Dizayn hám Format Túri",
-                dMin: "Minimalist ✨",
-                dCorp: "Korporativ 💼",
-                dCreat: "Kreativ Neo 🎨",
-                dDark: "Cyber Dark 🌙",
-                dEmerald: "Zúmrad 🌿",
-                dSunset: "Altın Sunset 🌅",
-                btnGenerate: "Jaratıw",
-                pModalTitle: "Hújjet Jaratılmaqta",
-                st1: "Maǵlıwmat izlew...",
-                st2: "Maǵlıwmatlardı hújjetke kirgiziw...",
-                st3: "Dizayndı durıslaw hám sáykeslestiriw...",
-                st4: "Juwmaqlawshı basqısh fayldı júklew...",
-                errSubject: "Pán atın kiritiń!",
-                errTopic: "Tema atın kiritiń!"
-            },
-            en: {
-                heroTitle: "Academic Student Portal",
-                heroDesc: "Generate essays, coursework and slides professionally with AI",
-                langLabel: "Language",
-                typeLabel: "Select Document Type",
-                tReferat: "Essay / Report",
-                subReferat: "10-15 p. Word",
-                tSlayd: "Slides",
-                subSlayd: "5-30 slides PPTX",
-                tKurs: "Coursework",
-                subKurs: "40-60 p. Word",
-                adminLink: "Contact Administrator",
-                inputsLabel: "Topic & Details",
-                lSubject: "Subject Name",
-                pSubject: "e.g.: Economics, History, Computer Science...",
-                lTopic: "Topic Name",
-                pTopic: "e.g.: Prospects of Digital Economy Development...",
-                lVolume: "Page Count",
-                lVolumeSlides: "Slide Count",
-                lDesign: "Design & Style",
-                dMin: "Minimalist ✨",
-                dCorp: "Corporate 💼",
-                dCreat: "Creative Neo 🎨",
-                dDark: "Cyber Dark 🌙",
-                dEmerald: "Emerald 🌿",
-                dSunset: "Golden Sunset 🌅",
-                btnGenerate: "Generate Document",
-                pModalTitle: "Generating Document",
-                st1: "Searching information...",
-                st2: "Inserting data into document...",
-                st3: "Adjusting and applying design...",
-                st4: "Final step uploading file...",
-                errSubject: "Please enter subject name!",
-                errTopic: "Please enter topic name!"
-            }
-        };
-
-        // ==========================================
-        // STATE
-        // ==========================================
-        const state = {
-            lang: 'uz',
-            docType: 'referat',
-            subject: '',
-            topic: '',
-            volume: 15,
-            design: 'minimalist'
-        };
-
-        const VOLUMES = {
-            referat: [10, 11, 12, 13, 14, 15],
-            slayd: [5, 10, 15, 20, 30],
-            kurs_ishi: [40, 45, 50, 55, 60]
-        };
-
-        // DOM Elements
-        const el = {
-            langRow: document.getElementById('langRow'),
-            docTypesGrid: document.getElementById('docTypesGrid'),
-            currentDocBadge: document.getElementById('currentDocBadge'),
-            subjectInput: document.getElementById('subjectInput'),
-            topicInput: document.getElementById('topicInput'),
-            volumeTitle: document.getElementById('volumeTitle'),
-            volumeBadge: document.getElementById('volumeBadge'),
-            pillsContainer: document.getElementById('pillsContainer'),
-            designSection: document.getElementById('designSection'),
-            designsGrid: document.getElementById('designsGrid'),
-            ctaBtn: document.getElementById('ctaBtn'),
-            progressModal: document.getElementById('progressModal'),
-            modalDocInfo: document.getElementById('modalDocInfo'),
-            barGauge: document.getElementById('barGauge'),
-            st2Label: document.getElementById('st2Label'),
-            toast: document.getElementById('toast')
-        };
-
-        // Fast Haptic
-        function haptic(type = 'light') {
-            try {
-                if (tg?.HapticFeedback) {
-                    if (type === 'medium') tg.HapticFeedback.impactOccurred('medium');
-                    else if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
-                    else if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
-                    else tg.HapticFeedback.impactOccurred('light');
-                }
-            } catch(e) {}
-        }
-
-        function showToast(msg) {
-            el.toast.textContent = msg;
-            el.toast.style.display = 'block';
-            haptic('error');
-            setTimeout(() => { el.toast.style.display = 'none'; }, 3000);
-        }
-
-        // ==========================================
-        // RENDER VOLUME PILLS
-        // ==========================================
-        function updateVolumeOptions() {
-            const list = VOLUMES[state.docType] || [10];
-            el.pillsContainer.innerHTML = '';
-
-            if (!list.includes(state.volume)) {
-                state.volume = list[list.length - 1];
-            }
-
-            const t = LANG_DATA[state.lang];
-            const isSlide = state.docType === 'slayd';
-            el.volumeTitle.textContent = isSlide ? t.lVolumeSlides : t.lVolume;
-            el.volumeBadge.textContent = `${state.volume} ${isSlide ? 'slayd' : 'bet'}`;
-            el.currentDocBadge.textContent = isSlide ? 'PowerPoint (.pptx)' : 'Word (.docx)';
-
-            list.forEach(v => {
-                const p = document.createElement('div');
-                p.className = 'pill' + (v === state.volume ? ' active' : '');
-                p.textContent = v;
-                p.onclick = () => {
-                    el.pillsContainer.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
-                    p.classList.add('active');
-                    state.volume = v;
-                    el.volumeBadge.textContent = `${v} ${isSlide ? 'slayd' : 'bet'}`;
-                    haptic('light');
-                };
-                el.pillsContainer.appendChild(p);
-            });
-        }
-
-        // ==========================================
-        // APPLY LANGUAGE
-        // ==========================================
-        function applyLanguage(lang) {
-            state.lang = lang;
-            const t = LANG_DATA[lang];
-            if (!t) return;
-
-            el.langRow.querySelectorAll('.lang-chip').forEach(b => {
-                b.classList.toggle('active', b.dataset.lang === lang);
-            });
-
-            document.querySelectorAll('[data-i18n]').forEach(node => {
-                const k = node.dataset.i18n;
-                if (t[k]) node.textContent = t[k];
-            });
-
-            document.querySelectorAll('[data-i18n-placeholder]').forEach(node => {
-                const k = node.dataset['i18nPlaceholder'];
-                if (t[k]) node.placeholder = t[k];
-            });
-
-            updateVolumeOptions();
-            haptic('light');
-        }
-
-        // ==========================================
-        // FAST ANIMATED PROGRESS UI
-        // ==========================================
-        async function startProgressFlow(data) {
-            el.progressModal.style.display = 'flex';
-            const t = LANG_DATA[state.lang];
-
-            const docNames = {
-                referat: t.tReferat,
-                slayd: t.tSlayd,
-                kurs_ishi: t.tKurs
-            };
-            const name = docNames[state.docType] || state.docType;
-            el.modalDocInfo.textContent = `${name}: ${state.volume} ${state.docType === 'slayd' ? 'slayd' : 'bet'} • ${state.topic.slice(0, 24)}`;
-            el.st2Label.textContent = `${t.st2} (${name})`;
-
-            const wait = ms => new Promise(r => setTimeout(r, ms));
-
-            // Stage 1: Ma'lumot izlash... (400ms)
-            el.barGauge.style.width = '25%';
-            await wait(450);
-            document.getElementById('st1').className = 'stage-row completed';
-            document.getElementById('stIcon1').textContent = '✅';
-
-            // Stage 2: Hujjatga kiritish... (550ms)
-            document.getElementById('st2').className = 'stage-row active';
-            el.barGauge.style.width = '55%';
-            haptic('light');
-            await wait(550);
-            document.getElementById('st2').className = 'stage-row completed';
-            document.getElementById('stIcon2').textContent = '✅';
-
-            // Stage 3: Dizaynni to'g'irlash... (450ms)
-            document.getElementById('st3').className = 'stage-row active';
-            el.barGauge.style.width = '80%';
-            haptic('light');
-            await wait(450);
-            document.getElementById('st3').className = 'stage-row completed';
-            document.getElementById('stIcon3').textContent = '✅';
-
-            // Stage 4: Yakuniy yuklash... (350ms)
-            document.getElementById('st4').className = 'stage-row active';
-            el.barGauge.style.width = '100%';
-            haptic('success');
-            await wait(350);
-            document.getElementById('st4').className = 'stage-row completed';
-            document.getElementById('stIcon4').textContent = '✅';
-
-            // Send via Telegram Bridge
-            await wait(250);
-            try {
-                if (tg?.sendData) {
-                    tg.sendData(JSON.stringify(data));
-                }
-            } catch(e) {
-                console.error("sendData error:", e);
-            }
-
-            // Clean close
-            setTimeout(() => {
-                try { tg?.close(); } catch(e) {}
-            }, 400);
-        }
-
-        // ==========================================
-        // SUBMIT ACTION
-        // ==========================================
-        function onGenerate() {
-            const t = LANG_DATA[state.lang];
-            state.subject = el.subjectInput.value.trim();
-            state.topic = el.topicInput.value.trim();
-
-            if (!state.subject) {
-                showToast(t.errSubject);
-                el.subjectInput.focus();
-                return;
-            }
-
-            if (!state.topic) {
-                showToast(t.errTopic);
-                el.topicInput.focus();
-                return;
-            }
-
-            const langTitle = {
-                uz: "O'zbek tilida",
-                uz_cyrl: "Ўзбек тилида (кирил)",
-                ru: "На русском языке",
-                kaa: "Qaraqalpaq tilinde",
-                en: "In English"
-            };
-
-            const payload = {
-                action: "generate_document",
-                doc_type: state.docType,
-                language: state.lang,
-                language_name: langTitle[state.lang] || "O'zbek tilida",
-                subject: state.subject,
-                topic: state.topic,
-                page_count: state.volume,
-                slide_count: state.volume,
-                design: state.design
-            };
-
-            haptic('medium');
-            startProgressFlow(payload);
-        }
-
-        // ==========================================
-        // EVENT BINDINGS
-        // ==========================================
-        el.langRow.addEventListener('click', e => {
-            const chip = e.target.closest('.lang-chip');
-            if (chip) applyLanguage(chip.dataset.lang);
-        });
-
-        el.docTypesGrid.addEventListener('click', e => {
-            const card = e.target.closest('.doc-card');
-            if (!card) return;
-
-            el.docTypesGrid.querySelectorAll('.doc-card').forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
-            state.docType = card.dataset.type;
-
-            updateVolumeOptions();
-            haptic('light');
-        });
-
-        el.designsGrid.addEventListener('click', e => {
-            const tile = e.target.closest('.design-tile');
-            if (!tile) return;
-
-            el.designsGrid.querySelectorAll('.design-tile').forEach(c => c.classList.remove('active'));
-            tile.classList.add('active');
-            state.design = tile.dataset.design;
-            haptic('light');
-        });
-
-        el.ctaBtn.addEventListener('click', onGenerate);
-
-        // ==========================================
-        // STARTUP
-        // ==========================================
-        applyLanguage('uz');
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
