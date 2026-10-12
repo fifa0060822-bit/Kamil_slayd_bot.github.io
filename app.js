@@ -1,6 +1,6 @@
 // ==========================================================================
 // TALABA BOT - WEB APP CLIENT APPLICATION (app.js)
-// Telegram WebApp SDK, 5 Tildagi Lug'at, Real-Time WebSocket va UI boshqaruvi
+// Telegram WebApp SDK, Dinamik Hujjat Moslashuvi, Real-Time WebSocket
 // ==========================================================================
 
 // 1. TELEGRAM SDK INITIALIZATION
@@ -13,7 +13,7 @@ if (tg) {
     } catch (e) {}
 }
 
-// 2. 5 TILLARDA PROFESSIONAL LUG'AT
+// 2. 5 TILLARDA PROFESSIONAL LUG'AT (GEMINI YOZUVLARIDAN TOZALANGAN)
 const I18N = {
     uz: {
         heroTitle: "Talaba Akademik Portali",
@@ -21,19 +21,16 @@ const I18N = {
         langTitle: "Til / Language",
         docTypeTitle: "Hujjat Turini Tanlang",
         tReferat: "Referat",
-        sReferat: "10-15 bet Word",
+        sReferat: "10-20 bet Word",
         tSlayd: "Slayd",
-        sSlayd: "5-30 ta PPTX",
+        sSlayd: "5-20 ta PPTX",
         tKurs: "Kurs ishi",
-        sKurs: "40-60 bet Word",
+        sKurs: "30-60 bet Word",
         adminLink: "Savollar bo'yicha adminga bog'lanish",
         tierTitle: "Sifat Darajasi (Tier)",
         tierSimple: "Oddiy",
-        subSimple: "Oq fon, matn",
         tierStandard: "Standart",
-        subStandard: "Oltin hoshiya",
         tierPremium: "Premium 💎",
-        subPremium: "Unsplash rasmli",
         styleTitle: "Kontent Uslubi (Slayd)",
         styleText: "1. Matn ko'proq, rasmlar kamroq",
         styleBalanced: "2. Balanslangan (matn va rasm)",
@@ -43,8 +40,10 @@ const I18N = {
         pSubject: "Masalan: Iqtisodiyot, Tarix, Informatika, Huquq...",
         lblTopic: "Mavzu nomi",
         pTopic: "Masalan: Raqamli iqtisodiyotning rivojlanish istiqbollari...",
-        lblVolume: "Sahifalar soni",
-        lblVolumeSlides: "Slaydlar soni",
+        lblVolume: "Sahifalar soni (10-20 bet)",
+        lblVolumeSlides: "Slaydlar soni (5-20 ta)",
+        lblVolumeKurs: "Sahifalar soni (30-60 bet)",
+        lblExactCount: "Aniq miqdorni belgilash:",
         designTitle: "Dizayn Shablonlari",
         dMin: "Minimalist ✨",
         dStand: "Oltin Standart 🟡",
@@ -55,7 +54,7 @@ const I18N = {
         btnGenerate: "Generatsiya Qilish",
         modalHead: "Hujjat Yaratilmoqda",
         st1: "Status 1: Ma'lumot izlanmoqda va Reja tuzilmoqda...",
-        st2: "Status 2: Matn va rasmlar yig'ilmoqda...",
+        st2: "Status 2: Matn va mavzuga mos rasmlar yig'ilmoqda...",
         st3: "Status 3: Dizayn va fayl shakllantirilmoqda...",
         st4: "Status 4: Yakuniy fayl Telegramga yuklanmoqda...",
         errSubject: "Fan nomini kiriting!",
@@ -67,19 +66,16 @@ const I18N = {
         langTitle: "Тил / Language",
         docTypeTitle: "Ҳужжат Турини Танланг",
         tReferat: "Реферат",
-        sReferat: "10-15 бет Word",
+        sReferat: "10-20 бет Word",
         tSlayd: "Слайд",
-        sSlayd: "5-30 та PPTX",
+        sSlayd: "5-20 та PPTX",
         tKurs: "Курс иши",
-        sKurs: "40-60 бет Word",
+        sKurs: "30-60 бет Word",
         adminLink: "Саволлар бўйича админга боғланиш",
         tierTitle: "Сифат Даражаси (Tier)",
         tierSimple: "Оддий",
-        subSimple: "Оқ фон, матн",
         tierStandard: "Стандарт",
-        subStandard: "Олтин ҳошия",
         tierPremium: "Premium 💎",
-        subPremium: "Unsplash расмли",
         styleTitle: "Контент Услуби (Слайд)",
         styleText: "1. Матн кўпроқ, расмлар камроқ",
         styleBalanced: "2. Балансланган (матн ва расм)",
@@ -89,8 +85,10 @@ const I18N = {
         pSubject: "Масалан: Иқтисодиёт, Тарих, Информатика, Ҳуқуқ...",
         lblTopic: "Мавзу номи",
         pTopic: "Масалан: Рақамли иқтисодиётнинг ривожланиш истиқболлари...",
-        lblVolume: "Саҳифалар сони",
-        lblVolumeSlides: "Слайдлар сони",
+        lblVolume: "Саҳифалар сони (10-20 бет)",
+        lblVolumeSlides: "Слайдлар сони (5-20 та)",
+        lblVolumeKurs: "Саҳифалар сони (30-60 бет)",
+        lblExactCount: "Аниқ миқдорни белгилаш:",
         designTitle: "Дизайн Шаблонлари",
         dMin: "Минималист ✨",
         dStand: "Олтин Стандарт 🟡",
@@ -101,7 +99,7 @@ const I18N = {
         btnGenerate: "Генерация Қилиш",
         modalHead: "Ҳужжат Яратилмоқда",
         st1: "Status 1: Маълумот изланмоқда ва Режа тузилмоқда...",
-        st2: "Status 2: Матн ва расмлар йиғилмоқда...",
+        st2: "Status 2: Матн ва мавзуга мос расмлар йиғилмоқда...",
         st3: "Status 3: Дизайн ва файл шакллантирилмоқда...",
         st4: "Status 4: Якуний файл Telegramга юкланмоқда...",
         errSubject: "Фан номини киритинг!",
@@ -113,19 +111,16 @@ const I18N = {
         langTitle: "Язык / Language",
         docTypeTitle: "Выберите Тип Документа",
         tReferat: "Реферат",
-        sReferat: "10-15 стр. Word",
+        sReferat: "10-20 стр. Word",
         tSlayd: "Слайды",
-        sSlayd: "5-30 слайдов PPTX",
+        sSlayd: "5-20 слайдов PPTX",
         tKurs: "Курсовая",
-        sKurs: "40-60 стр. Word",
+        sKurs: "30-60 стр. Word",
         adminLink: "Связаться с администратором",
         tierTitle: "Уровень качества (Tier)",
         tierSimple: "Простой",
-        subSimple: "Белый фон, текст",
         tierStandard: "Стандарт",
-        subStandard: "Золотая рамка",
         tierPremium: "Премиум 💎",
-        subPremium: "Фото Unsplash",
         styleTitle: "Стиль контента (Слайды)",
         styleText: "1. Больше текста, меньше картинок",
         styleBalanced: "2. Сбалансированный (текст + фото)",
@@ -135,8 +130,10 @@ const I18N = {
         pSubject: "Например: Экономика, История, Право...",
         lblTopic: "Название темы",
         pTopic: "Например: Перспективы развития цифровой экономики...",
-        lblVolume: "Количество страниц",
-        lblVolumeSlides: "Количество слайдов",
+        lblVolume: "Количество страниц (10-20)",
+        lblVolumeSlides: "Количество слайдов (5-20)",
+        lblVolumeKurs: "Количество страниц (30-60)",
+        lblExactCount: "Точное количество:",
         designTitle: "Дизайн Презентации",
         dMin: "Минималист ✨",
         dStand: "Золотой Стандарт 🟡",
@@ -147,7 +144,7 @@ const I18N = {
         btnGenerate: "Сгенерировать",
         modalHead: "Создание документа",
         st1: "Status 1: Поиск информации и составление плана...",
-        st2: "Status 2: Сбор текста и фото Unsplash...",
+        st2: "Status 2: Сбор текста и иллюстраций по теме...",
         st3: "Status 3: Оформление дизайна и генерация файла...",
         st4: "Status 4: Финальная загрузка в Telegram...",
         errSubject: "Введите название предмета!",
@@ -159,19 +156,16 @@ const I18N = {
         langTitle: "Til / Language",
         docTypeTitle: "Hújjet Túrin Saylań",
         tReferat: "Referat",
-        sReferat: "10-15 bet Word",
+        sReferat: "10-20 bet Word",
         tSlayd: "Slayd",
-        sSlayd: "5-30 bet PPTX",
+        sSlayd: "5-20 bet PPTX",
         tKurs: "Kurs jumısı",
-        sKurs: "40-60 bet Word",
+        sKurs: "30-60 bet Word",
         adminLink: "Sorawlar boyınsha adminge baylanısıw",
         tierTitle: "Sapa Dárejesi (Tier)",
         tierSimple: "Ápiwayı",
-        subSimple: "Aq fon, tekst",
         tierStandard: "Standart",
-        subStandard: "Altın hoshiya",
         tierPremium: "Premium 💎",
-        subPremium: "Unsplash súwretli",
         styleTitle: "Kontent Uslubı (Slayd)",
         styleText: "1. Tekst kóbirek, súwretler az",
         styleBalanced: "2. Balanslanǵan (tekst hám súwret)",
@@ -181,8 +175,10 @@ const I18N = {
         pSubject: "Máselen: Ekonomika, Tariyx, Huqıq...",
         lblTopic: "Tema atı",
         pTopic: "Máselen: Sanlı ekonomikanıń rawajlanıw keleshegi...",
-        lblVolume: "Betler sanı",
-        lblVolumeSlides: "Slaydlar sanı",
+        lblVolume: "Betler sanı (10-20 bet)",
+        lblVolumeSlides: "Slaydlar sanı (5-20 ta)",
+        lblVolumeKurs: "Betler sanı (30-60 bet)",
+        lblExactCount: "Anıq muǵdardı belgilew:",
         designTitle: "Dizayn Shablonları",
         dMin: "Minimalist ✨",
         dStand: "Altın Standart 🟡",
@@ -193,7 +189,7 @@ const I18N = {
         btnGenerate: "Jaratıw",
         modalHead: "Hújjet Jaratılmaqta",
         st1: "Status 1: Maǵlıwmat izlew hám Reje dúziw...",
-        st2: "Status 2: Tekst hám súwretler jıynaw...",
+        st2: "Status 2: Tekst hám temaǵa say súwretler...",
         st3: "Status 3: Dizayn hám fayl dúziw...",
         st4: "Status 4: Juwmaqlawshı fayldı Telegramǵa júklew...",
         errSubject: "Pán atın kiritiń!",
@@ -205,19 +201,16 @@ const I18N = {
         langTitle: "Language",
         docTypeTitle: "Select Document Type",
         tReferat: "Essay / Report",
-        sReferat: "10-15 p. Word",
+        sReferat: "10-20 p. Word",
         tSlayd: "Slides",
-        sSlayd: "5-30 slides PPTX",
+        sSlayd: "5-20 slides PPTX",
         tKurs: "Coursework",
-        sKurs: "40-60 p. Word",
+        sKurs: "30-60 p. Word",
         adminLink: "Contact Administrator",
         tierTitle: "Quality Tier",
         tierSimple: "Simple",
-        subSimple: "White bg, text",
         tierStandard: "Standard",
-        subStandard: "Gold border",
         tierPremium: "Premium 💎",
-        subPremium: "Unsplash photos",
         styleTitle: "Content Style (Slides)",
         styleText: "1. More text, fewer images",
         styleBalanced: "2. Balanced (text & images)",
@@ -227,8 +220,10 @@ const I18N = {
         pSubject: "e.g.: Economics, History, Computer Science...",
         lblTopic: "Topic Name",
         pTopic: "e.g.: Prospects of Digital Economy Development...",
-        lblVolume: "Page Count",
-        lblVolumeSlides: "Slide Count",
+        lblVolume: "Page Count (10-20 p.)",
+        lblVolumeSlides: "Slide Count (5-20 slides)",
+        lblVolumeKurs: "Page Count (30-60 p.)",
+        lblExactCount: "Set Exact Count:",
         designTitle: "Presentation Design",
         dMin: "Minimalist ✨",
         dStand: "Gold Standard 🟡",
@@ -239,7 +234,7 @@ const I18N = {
         btnGenerate: "Generate Document",
         modalHead: "Generating Document",
         st1: "Status 1: Researching & structuring outline...",
-        st2: "Status 2: Drafting text & fetching Unsplash photos...",
+        st2: "Status 2: Drafting text & matching topic visuals...",
         st3: "Status 3: Applying design & building document...",
         st4: "Status 4: Uploading final document to Telegram...",
         errSubject: "Please enter subject name!",
@@ -250,20 +245,57 @@ const I18N = {
 // 3. ILOVA HOLATI (STATE)
 const state = {
     lang: 'uz',
-    docType: 'referat',
+    docType: 'slayd',  // Standart bo'yicha Slayd
     tier: 'premium',
     contentStyle: 'balanced',
     subject: '',
     topic: '',
-    volume: 15,
+    volume: 10,
     design: 'minimalist',
     clientId: 'client_' + Math.random().toString(36).substring(2, 9)
 };
 
-const VOLUMES = {
-    referat: [10, 11, 12, 13, 14, 15],
-    slayd: [5, 10, 15, 20, 30],
-    kurs_ishi: [40, 45, 50, 55, 60]
+// Dinamik hajm diapazonlari
+const DOC_CONFIGS = {
+    slayd: {
+        pills: [5, 8, 10, 12, 15, 20],
+        min: 5,
+        max: 20,
+        defaultVal: 10,
+        unit: "slayd",
+        formatBadge: "PowerPoint (.pptx)",
+        tierSubs: {
+            simple: "Oq fon, matn",
+            standard: "Oltin hoshiya",
+            premium: "Mavzuga mos tasvirli"
+        }
+    },
+    referat: {
+        pills: [10, 12, 14, 15, 18, 20],
+        min: 10,
+        max: 25,
+        defaultVal: 15,
+        unit: "bet",
+        formatBadge: "Word (.docx)",
+        tierSubs: {
+            simple: "Klassik referat",
+            standard: "OTM standarti",
+            premium: "Ilmiy rasmli"
+        }
+    },
+    kurs_ishi: {
+        pills: [30, 35, 40, 45, 50, 60],
+        min: 30,
+        max: 60,
+        defaultVal: 40,
+        unit: "bet",
+        formatBadge: "Word (.docx)",
+        tierSubs: {
+            simple: "3 bobli matn",
+            standard: "To'liq OTM standarti",
+            premium: "Grafik va rasmli"
+        }
+    }
 };
 
 // DOM ELEMENTLARI
@@ -273,6 +305,9 @@ const dom = {
     formatBadge: document.getElementById('formatBadge'),
     tierGrid: document.getElementById('tierGrid'),
     tierBadge: document.getElementById('tierBadge'),
+    subSimple: document.getElementById('subSimple'),
+    subStandard: document.getElementById('subStandard'),
+    subPremium: document.getElementById('subPremium'),
     styleSection: document.getElementById('styleSection'),
     styleGrid: document.getElementById('styleGrid'),
     subjectInput: document.getElementById('subjectInput'),
@@ -280,6 +315,9 @@ const dom = {
     volumeTitle: document.getElementById('volumeTitle'),
     volumeBadge: document.getElementById('volumeBadge'),
     pillsBar: document.getElementById('pillsBar'),
+    exactNumberInput: document.getElementById('exactNumberInput'),
+    btnMinus: document.getElementById('btnMinus'),
+    btnPlus: document.getElementById('btnPlus'),
     designSection: document.getElementById('designSection'),
     palettesGrid: document.getElementById('palettesGrid'),
     submitBtn: document.getElementById('submitBtn'),
@@ -309,39 +347,91 @@ function showToast(msg) {
     setTimeout(() => { dom.toastMsg.style.display = 'none'; }, 3000);
 }
 
-// Hajm va sahifalar sonini yangilash
-function updateVolumeOptions() {
-    const list = VOLUMES[state.docType] || [10];
-    dom.pillsBar.innerHTML = '';
-
-    if (!list.includes(state.volume)) {
-        state.volume = list[list.length - 1];
-    }
-
+// ==========================================================================
+// 4. DINAMIK HUJJAT SHAKLI VA MAYDONLAR MOSLASHUVI
+// ==========================================================================
+function updateDocumentView() {
+    const cfg = DOC_CONFIGS[state.docType] || DOC_CONFIGS.slayd;
     const t = I18N[state.lang];
     const isSlide = state.docType === 'slayd';
-    dom.volumeTitle.textContent = isSlide ? t.lblVolumeSlides : t.lblVolume;
-    dom.volumeBadge.textContent = `${state.volume} ${isSlide ? 'slayd' : 'bet'}`;
-    dom.formatBadge.textContent = isSlide ? 'PowerPoint (.pptx)' : 'Word (.docx)';
 
-    // Slayd xususiyatlari faqat slayd tanlanganda ko'rinadi
+    // Format badge
+    dom.formatBadge.textContent = cfg.formatBadge;
+
+    // Slayd xususiyatlari (Uslub va Shablonlar) faqat slayd tanlanganda ko'rinadi
     dom.styleSection.style.display = isSlide ? 'block' : 'none';
     dom.designSection.style.display = isSlide ? 'block' : 'none';
 
-    list.forEach(v => {
+    // Volume title
+    if (state.docType === 'slayd') {
+        dom.volumeTitle.textContent = t.lblVolumeSlides;
+    } else if (state.docType === 'referat') {
+        dom.volumeTitle.textContent = t.lblVolume;
+    } else {
+        dom.volumeTitle.textContent = t.lblVolumeKurs;
+    }
+
+    // Tier taglavhalari
+    dom.subSimple.textContent = cfg.tierSubs.simple;
+    dom.subStandard.textContent = cfg.tierSubs.standard;
+    dom.subPremium.textContent = cfg.tierSubs.premium;
+
+    // Volume tekshiruvi va cheklovi
+    if (state.volume < cfg.min || state.volume > cfg.max) {
+        state.volume = cfg.defaultVal;
+    }
+
+    // Stepper sozlamalari
+    dom.exactNumberInput.min = cfg.min;
+    dom.exactNumberInput.max = cfg.max;
+    dom.exactNumberInput.value = state.volume;
+
+    dom.volumeBadge.textContent = `${state.volume} ${cfg.unit}`;
+
+    // Pills bar yaratish
+    dom.pillsBar.innerHTML = '';
+    cfg.pills.forEach(v => {
         const b = document.createElement('div');
         b.className = 'num-pill' + (v === state.volume ? ' active' : '');
         b.textContent = v;
         b.onclick = () => {
-            dom.pillsBar.querySelectorAll('.num-pill').forEach(x => x.classList.remove('active'));
-            b.classList.add('active');
-            state.volume = v;
-            dom.volumeBadge.textContent = `${v} ${isSlide ? 'slayd' : 'bet'}`;
+            setVolumeValue(v);
             haptic('light');
         };
         dom.pillsBar.appendChild(b);
     });
 }
+
+function setVolumeValue(val) {
+    const cfg = DOC_CONFIGS[state.docType] || DOC_CONFIGS.slayd;
+    let n = parseInt(val, 10);
+    if (isNaN(n)) n = cfg.defaultVal;
+    n = Math.max(cfg.min, Math.min(cfg.max, n));
+
+    state.volume = n;
+    dom.exactNumberInput.value = n;
+    dom.volumeBadge.textContent = `${n} ${cfg.unit}`;
+
+    // Pills faolligini yangilash
+    dom.pillsBar.querySelectorAll('.num-pill').forEach(el => {
+        el.classList.toggle('active', parseInt(el.textContent, 10) === n);
+    });
+}
+
+// Stepper tugmalari
+dom.btnMinus.addEventListener('click', () => {
+    setVolumeValue(state.volume - 1);
+    haptic('light');
+});
+
+dom.btnPlus.addEventListener('click', () => {
+    setVolumeValue(state.volume + 1);
+    haptic('light');
+});
+
+dom.exactNumberInput.addEventListener('change', (e) => {
+    setVolumeValue(e.target.value);
+});
 
 // Tilni almashtirish
 function applyLanguage(lang) {
@@ -363,12 +453,12 @@ function applyLanguage(lang) {
         if (t[k]) node.placeholder = t[k];
     });
 
-    updateVolumeOptions();
+    updateDocumentView();
     haptic('light');
 }
 
 // ==========================================================================
-// 4. REAL-TIME WEBSOCKET PROGRESS BOSHQARUVI
+// 5. REAL-TIME WEBSOCKET PROGRESS BOSHQARUVI
 // ==========================================================================
 function updateProgressUI(step, isCompleted = false) {
     for (let i = 1; i <= 4; i++) {
@@ -396,11 +486,12 @@ async function startRealtimeProcess(payload) {
 
     const docNames = { referat: t.tReferat, slayd: t.tSlayd, kurs_ishi: t.tKurs };
     const name = docNames[state.docType] || state.docType;
-    dom.modalSub.textContent = `${name}: ${state.volume} ${state.docType === 'slayd' ? 'slayd' : 'bet'} • Gemini + Unsplash`;
+    const cfg = DOC_CONFIGS[state.docType] || DOC_CONFIGS.slayd;
+    dom.modalSub.textContent = `${name}: ${state.volume} ${cfg.unit} • Yuqori sifatli tahlil`;
 
     updateProgressUI(1);
 
-    // 1. Telegram Bridge orqali to'g'ridan-to'g'ri jo'natish (agar bot klaviaturasidan ochilgan bo'lsa)
+    // 1. Telegram native data bridge (agar bot klaviaturasidan ochilgan bo'lsa)
     try {
         if (tg?.sendData) {
             tg.sendData(JSON.stringify(payload));
@@ -441,7 +532,6 @@ async function startRealtimeProcess(payload) {
         fallbackVisualProgression();
     }
 
-    // Zaxira animatsiya agar WebSocket server mavjud bo'lmasa
     setTimeout(() => {
         if (!wsConnected) fallbackVisualProgression();
     }, 2500);
@@ -461,7 +551,7 @@ async function fallbackVisualProgression() {
 }
 
 // ==========================================================================
-// 5. YUBORISH VA VALIDATSIYA (SUBMIT)
+// 6. YUBORISH VA VALIDATSIYA (SUBMIT)
 // ==========================================================================
 function onSubmit() {
     const t = I18N[state.lang];
@@ -507,7 +597,7 @@ function onSubmit() {
 }
 
 // ==========================================================================
-// 6. EVENT TINGLOVCHILARI (EVENT LISTENERS)
+// 7. EVENT TINGLOVCHILARI (EVENT LISTENERS)
 // ==========================================================================
 dom.langPills.addEventListener('click', e => {
     const b = e.target.closest('.lang-btn');
@@ -520,7 +610,7 @@ dom.typeGrid.addEventListener('click', e => {
     dom.typeGrid.querySelectorAll('.type-tab').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
     state.docType = t.dataset.type;
-    updateVolumeOptions();
+    updateDocumentView();
     haptic('light');
 });
 
@@ -556,3 +646,4 @@ dom.submitBtn.addEventListener('click', onSubmit);
 
 // Boshlang'ich initsializatsiya
 applyLanguage('uz');
+updateDocumentView();
