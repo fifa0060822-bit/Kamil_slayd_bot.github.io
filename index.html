@@ -3,39 +3,537 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Prezentatsiya Yaratish</title>
+    <title>Talaba Bot - AI Akademik Yordamchi</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --tg-theme-bg-color: #0f172a;
+            --tg-theme-text-color: #f8fafc;
+            --tg-theme-hint-color: #94a3b8;
+            --tg-theme-link-color: #38bdf8;
+            --tg-theme-button-color: #3b82f6;
+            --tg-theme-button-text-color: #ffffff;
+            --tg-theme-secondary-bg-color: #1e293b;
+
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.35);
+            --gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            min-height: 100vh;
+            padding-bottom: 90px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* ========== HEADER ========== */
+        .app-header {
+            text-align: center;
+            padding: 20px 0 24px;
+            position: relative;
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #818cf8;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .header-title {
+            font-size: 1.65rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+        }
+
+        .header-subtitle {
+            font-size: 0.88rem;
+            color: var(--tg-theme-hint-color);
+            font-weight: 500;
+        }
+
+        /* ========== CARDS & SECTIONS ========== */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--tg-theme-hint-color);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .section-label svg {
+            color: #818cf8;
+        }
+
+        /* ========== LANGUAGE PILLS ========== */
+        .lang-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+        }
+
+        .lang-btn {
+            padding: 8px 4px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--card-border);
+            color: var(--tg-theme-hint-color);
+            font-size: 0.74rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .lang-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+
+        /* ========== DOC TYPE SELECTOR (4 TABS) ========== */
+        .doc-type-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .doc-type-card {
+            padding: 14px 12px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+        }
+
+        .doc-type-card:active {
+            transform: scale(0.97);
+        }
+
+        .doc-type-card.active {
+            border-color: #818cf8;
+            background: rgba(99, 102, 241, 0.12);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.2);
+        }
+
+        .doc-icon {
+            font-size: 1.5rem;
+        }
+
+        .doc-name {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .doc-desc {
+            font-size: 0.72rem;
+            color: var(--tg-theme-hint-color);
+            line-height: 1.3;
+        }
+
+        .admin-card {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(168, 85, 247, 0.12) 100%);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            text-decoration: none;
+        }
+
+        .admin-card:active {
+            transform: scale(0.98);
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-btn-tag {
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: #ec4899;
+            color: white;
+            font-size: 0.76rem;
+            font-weight: 700;
+        }
+
+        /* ========== INPUTS ========== */
+        .input-group {
+            margin-bottom: 14px;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--tg-theme-hint-color);
+            margin-bottom: 6px;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 13px 16px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1.5px solid var(--card-border);
+            border-radius: var(--radius-md);
+            color: #ffffff;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .text-input:focus {
+            border-color: #818cf8;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .text-input::placeholder {
+            color: #64748b;
+        }
+
+        /* ========== PAGE PILLS ========== */
+        .pills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill-btn {
+            flex: 1;
+            min-width: calc(20% - 8px);
+            padding: 11px 4px;
+            border-radius: var(--radius-sm);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1.5px solid var(--card-border);
+            color: var(--tg-theme-text-color);
+            font-size: 0.92rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .pill-btn.active {
+            background: var(--gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+        }
+
+        /* ========== DESIGN GRID (FOR SLAYD) ========== */
+        .design-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .design-card {
+            padding: 12px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid transparent;
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .design-card.active {
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.12);
+        }
+
+        .design-box {
+            height: 52px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .design-box.minimalist { background: #f8fafc; }
+        .design-box.minimalist .d-line { background: #94a3b8; height: 4px; border-radius: 2px; }
+
+        .design-box.corporate { background: #1e3a8a; }
+        .design-box.corporate .d-line { background: #60a5fa; height: 4px; border-radius: 2px; }
+
+        .design-box.creative { background: #831843; }
+        .design-box.creative .d-line { background: #f472b6; height: 4px; border-radius: 2px; }
+
+        .design-box.dark { background: #020617; }
+        .design-box.dark .d-line { background: #818cf8; height: 4px; border-radius: 2px; }
+
+        .design-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* ========== GENERATE BUTTON ========== */
+        .generate-btn {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            font-family: inherit;
+            color: #ffffff;
+            background: var(--gradient);
+            border: none;
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+        }
+
+        .generate-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* ========== PROGRESS OVERLAY MODAL ========== */
+        .progress-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .progress-box {
+            width: 100%;
+            max-width: 400px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 26px 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .progress-headline {
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .progress-doc-info {
+            font-size: 0.82rem;
+            color: var(--tg-theme-hint-color);
+            margin-bottom: 24px;
+        }
+
+        /* Progress Steps List */
+        .steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            text-align: left;
+            margin-bottom: 24px;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 14px;
+            border-radius: var(--radius-md);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-border);
+            transition: var(--transition);
+        }
+
+        .step-item.pending {
+            opacity: 0.45;
+        }
+
+        .step-item.active {
+            opacity: 1;
+            background: rgba(99, 102, 241, 0.12);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+        }
+
+        .step-item.completed {
+            opacity: 1;
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .step-icon-wrap {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .step-item.active .step-icon-wrap {
+            animation: pulseRotate 1.5s linear infinite;
+        }
+
+        @keyframes pulseRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .step-text {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .step-item.completed .step-text {
+            color: #4ade80;
+        }
+
+        /* Progress Bar */
+        .progress-bar-wrap {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 15%;
+            background: var(--gradient);
+            border-radius: 999px;
+            transition: width 0.4s ease;
+        }
+
+        /* Toast / Error */
+        .error-toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ef4444;
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
+            z-index: 10000;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container" id="app">
+    <div class="container">
         <!-- Header -->
         <header class="app-header">
-            <div class="header-icon">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                    <line x1="8" y1="21" x2="16" y2="21"></line>
-                    <line x1="12" y1="17" x2="12" y2="21"></line>
-                </svg>
-            </div>
-            <h1 class="header-title" data-i18n="appTitle">Prezentatsiya Yaratish</h1>
-            <p class="header-subtitle" data-i18n="appSubtitle">AI yordamida professional taqdimotlar</p>
+            <div class="header-badge">⚡ AI Talaba Portali</div>
+            <h1 class="header-title" data-i18n="appTitle">Akademik Ishlar Yaratish</h1>
+            <p class="header-subtitle" data-i18n="appSubtitle">Google Gemini yordamida referat, slayd va kurs ishi</p>
         </header>
 
-        <!-- Language Selector -->
-        <section class="form-section">
-            <label class="form-label" data-i18n="langLabel">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="2" y1="12" x2="22" y2="12"></line>
-                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                </svg>
-                Til / Язык
-            </label>
-            <div class="lang-buttons" id="langButtons">
+        <!-- Tilni tanlash -->
+        <section class="card">
+            <div class="section-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <span data-i18n="langLabel">Til / Language</span>
+            </div>
+            <div class="lang-grid" id="langGrid">
                 <button class="lang-btn active" data-lang="uz">O'zbek</button>
                 <button class="lang-btn" data-lang="uz_cyrl">Ўзбек</button>
                 <button class="lang-btn" data-lang="ru">Русский</button>
@@ -44,117 +542,608 @@
             </div>
         </section>
 
-        <!-- Subject Name -->
-        <section class="form-section">
-            <label class="form-label" for="subjectInput" data-i18n="subjectLabel">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                </svg>
-                Fan nomi
-            </label>
-            <input type="text" id="subjectInput" class="form-input" data-i18n-placeholder="subjectPlaceholder" placeholder="Masalan: Tarix, Informatika..." autocomplete="off">
-        </section>
+        <!-- Hujjat turini tanlash (4 ta bo'lim) -->
+        <section class="card">
+            <div class="section-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span data-i18n="docTypeLabel">Hujjat Turini Tanlang</span>
+            </div>
+            <div class="doc-type-grid" id="docTypeGrid">
+                <!-- 1. Referat -->
+                <div class="doc-type-card active" data-type="referat">
+                    <span class="doc-icon">📝</span>
+                    <span class="doc-name" data-i18n="docReferat">Referat</span>
+                    <span class="doc-desc" data-i18n="descReferat">10-15 betli Word (.docx)</span>
+                </div>
 
-        <!-- Topic Name -->
-        <section class="form-section">
-            <label class="form-label" for="topicInput" data-i18n="topicLabel">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="17" y1="10" x2="3" y2="10"></line>
-                    <line x1="21" y1="6" x2="3" y2="6"></line>
-                    <line x1="21" y1="14" x2="3" y2="14"></line>
-                    <line x1="17" y1="18" x2="3" y2="18"></line>
-                </svg>
-                Mavzu nomi
-            </label>
-            <input type="text" id="topicInput" class="form-input" data-i18n-placeholder="topicPlaceholder" placeholder="Masalan: Sun'iy intellektning kelajagi..." autocomplete="off">
-        </section>
+                <!-- 2. Slayd -->
+                <div class="doc-type-card" data-type="slayd">
+                    <span class="doc-icon">📊</span>
+                    <span class="doc-name" data-i18n="docSlayd">Slayd</span>
+                    <span class="doc-desc" data-i18n="descSlayd">5-30 sahifa (.pptx)</span>
+                </div>
 
-        <!-- Slide Count -->
-        <section class="form-section">
-            <label class="form-label" data-i18n="slidesLabel">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                </svg>
-                Slaydlar soni
-            </label>
-            <div class="slide-buttons" id="slideButtons">
-                <button class="slide-btn" data-count="5">5</button>
-                <button class="slide-btn active" data-count="10">10</button>
-                <button class="slide-btn" data-count="15">15</button>
-                <button class="slide-btn" data-count="20">20</button>
-                <button class="slide-btn" data-count="30">30</button>
+                <!-- 3. Kurs ishi -->
+                <div class="doc-type-card" data-type="kurs_ishi">
+                    <span class="doc-icon">📚</span>
+                    <span class="doc-name" data-i18n="docKurs">Kurs ishi</span>
+                    <span class="doc-desc" data-i18n="descKurs">40-60 betli katta (.docx)</span>
+                </div>
+
+                <!-- 4. Adminga murojaat -->
+                <a class="doc-type-card admin-card" href="https://t.me/kamokuz" target="_blank">
+                    <div class="admin-info">
+                        <span class="doc-icon">👨‍💻</span>
+                        <div>
+                            <span class="doc-name" data-i18n="adminTitle">Adminga murojaat</span>
+                            <span class="doc-desc">@kamokuz orqali bog'lanish</span>
+                        </div>
+                    </div>
+                    <span class="admin-btn-tag" data-i18n="adminBtn">Yozish</span>
+                </a>
             </div>
         </section>
 
-        <!-- Design Selection -->
-        <section class="form-section">
-            <label class="form-label" data-i18n="designLabel">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
-                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
-                    <path d="M2 2l7.586 7.586"></path>
-                    <circle cx="11" cy="11" r="2"></circle>
-                </svg>
-                Dizayn turi
-            </label>
+        <!-- Fan va Mavzu kiritish -->
+        <section class="card">
+            <div class="section-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <span data-i18n="infoLabel">Ma'lumotlar</span>
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" data-i18n="subjectLabel">Fan nomi</label>
+                <input type="text" id="subjectInput" class="text-input" data-i18n-placeholder="subjectPlaceholder" placeholder="Masalan: Iqtisodiyot, Huquq, Informatika...">
+            </div>
+
+            <div class="input-group">
+                <label class="input-label" data-i18n="topicLabel">Mavzu nomi</label>
+                <input type="text" id="topicInput" class="text-input" data-i18n-placeholder="topicPlaceholder" placeholder="Masalan: Raqamli iqtisodiyotning rivojlanishi...">
+            </div>
+        </section>
+
+        <!-- Sahifalar / Slaydlar soni -->
+        <section class="card" id="pageCountSection">
+            <div class="section-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                <span id="pageCountLabel" data-i18n="pagesLabel">Sahifalar soni</span>
+            </div>
+            <div class="pills-grid" id="pagePillsGrid">
+                <!-- Javascript dinamik joylaydi -->
+            </div>
+        </section>
+
+        <!-- Slayd dizayni (Faqat slayd tanlanganda chiqadi) -->
+        <section class="card" id="designSection" style="display: none;">
+            <div class="section-label">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/></svg>
+                <span data-i18n="designLabel">Prezentatsiya dizayni</span>
+            </div>
             <div class="design-grid" id="designGrid">
                 <div class="design-card active" data-design="minimalist">
-                    <div class="design-preview minimalist-preview">
-                        <div class="preview-line long"></div>
-                        <div class="preview-line medium"></div>
-                        <div class="preview-line short"></div>
-                    </div>
-                    <span class="design-name" data-i18n="designMinimalist">Minimalist</span>
+                    <div class="design-box minimalist"><div class="d-line" style="width:70%;"></div><div class="d-line" style="width:45%;"></div></div>
+                    <span class="design-title" data-i18n="designMin">Minimalist</span>
                 </div>
                 <div class="design-card" data-design="corporate">
-                    <div class="design-preview corporate-preview">
-                        <div class="preview-bar"></div>
-                        <div class="preview-line long"></div>
-                        <div class="preview-line medium"></div>
-                    </div>
-                    <span class="design-name" data-i18n="designCorporate">Korporativ</span>
+                    <div class="design-box corporate"><div class="d-line" style="width:80%;"></div><div class="d-line" style="width:50%;"></div></div>
+                    <span class="design-title" data-i18n="designCorp">Korporativ</span>
                 </div>
                 <div class="design-card" data-design="creative">
-                    <div class="design-preview creative-preview">
-                        <div class="preview-circle"></div>
-                        <div class="preview-line short"></div>
-                        <div class="preview-line medium"></div>
-                    </div>
-                    <span class="design-name" data-i18n="designCreative">Kreativ</span>
+                    <div class="design-box creative"><div class="d-line" style="width:75%;"></div><div class="d-line" style="width:40%;"></div></div>
+                    <span class="design-title" data-i18n="designCreat">Kreativ</span>
                 </div>
                 <div class="design-card" data-design="dark">
-                    <div class="design-preview dark-preview">
-                        <div class="preview-line long"></div>
-                        <div class="preview-line short"></div>
-                        <div class="preview-line medium"></div>
-                    </div>
-                    <span class="design-name" data-i18n="designDark">Qorong'u</span>
+                    <div class="design-box dark"><div class="d-line" style="width:85%;"></div><div class="d-line" style="width:60%;"></div></div>
+                    <span class="design-title" data-i18n="designDark">Qorong'u</span>
                 </div>
             </div>
         </section>
 
-        <!-- Generate Button -->
-        <section class="form-section generate-section">
-            <button class="generate-btn" id="generateBtn" data-i18n="generateBtn">
-                <span class="btn-text">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                    </svg>
-                    Yaratish
-                </span>
-                <span class="btn-loading" style="display: none;">
-                    <div class="spinner"></div>
-                    <span data-i18n="generating">Yaratilmoqda...</span>
-                </span>
-            </button>
-        </section>
-
-        <!-- Status Message -->
-        <div class="status-message" id="statusMessage" style="display: none;"></div>
+        <!-- Yaratish tugmasi -->
+        <button class="generate-btn" id="generateBtn">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span id="generateBtnText" data-i18n="generateBtn">Yaratish</span>
+        </button>
     </div>
 
-    <script src="script.js"></script>
+    <!-- JONLI PROGRESS UI (Talab qilingan 4 ta bosqich) -->
+    <div class="progress-overlay" id="progressOverlay">
+        <div class="progress-box">
+            <h2 class="progress-headline" data-i18n="progressTitle">Hujjat Yaratilmoqda</h2>
+            <p class="progress-doc-info" id="progressDocInfo">Referat: 15 bet • AI Gemini 3.8</p>
+
+            <div class="steps-list">
+                <!-- 1-bosqich -->
+                <div class="step-item active" id="step1">
+                    <div class="step-icon-wrap" id="stepIcon1">🔁</div>
+                    <span class="step-text" data-i18n="step1">Ma'lumot izlash...</span>
+                </div>
+
+                <!-- 2-bosqich -->
+                <div class="step-item pending" id="step2">
+                    <div class="step-icon-wrap" id="stepIcon2">🔁</div>
+                    <span class="step-text" id="step2Text" data-i18n="step2">Ma'lumotlarni hujjatga kiritish jarayoni...</span>
+                </div>
+
+                <!-- 3-bosqich -->
+                <div class="step-item pending" id="step3">
+                    <div class="step-icon-wrap" id="stepIcon3">🔁</div>
+                    <span class="step-text" data-i18n="step3">Dizaynni to'g'irlash va moslash...</span>
+                </div>
+
+                <!-- 4-bosqich -->
+                <div class="step-item pending" id="step4">
+                    <div class="step-icon-wrap" id="stepIcon4">🔁</div>
+                    <span class="step-text" data-i18n="step4">Yakuniy bosqich faylni yuklash...</span>
+                </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="error-toast" id="errorToast">Xatolik yuz berdi!</div>
+
+    <script>
+        // ==========================================
+        // TELEGRAM WEB APP INIT
+        // ==========================================
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+            tg.enableClosingConfirmation();
+        }
+
+        // ==========================================
+        // i18n TARJIMALAR (5 TIL)
+        // ==========================================
+        const I18N = {
+            uz: {
+                appTitle: "Akademik Ishlar Yaratish",
+                appSubtitle: "Google Gemini yordamida referat, slayd va kurs ishi",
+                langLabel: "Til / Language",
+                docTypeLabel: "Hujjat Turini Tanlang",
+                docReferat: "Referat",
+                descReferat: "10-15 betli Word (.docx)",
+                docSlayd: "Slayd",
+                descSlayd: "5-30 sahifa (.pptx)",
+                docKurs: "Kurs ishi",
+                descKurs: "40-60 betli katta (.docx)",
+                adminTitle: "Adminga murojaat",
+                adminBtn: "Yozish",
+                infoLabel: "Ma'lumotlar",
+                subjectLabel: "Fan nomi",
+                subjectPlaceholder: "Masalan: Iqtisodiyot, Tarix, Huquq...",
+                topicLabel: "Mavzu nomi",
+                topicPlaceholder: "Masalan: Raqamli iqtisodiyotning rivojlanishi...",
+                pagesLabel: "Sahifalar soni",
+                slidesLabel: "Slaydlar soni",
+                designLabel: "Prezentatsiya dizayni",
+                designMin: "Minimalist",
+                designCorp: "Korporativ",
+                designCreat: "Kreativ",
+                designDark: "Qorong'u",
+                generateBtn: "Yaratish",
+                progressTitle: "Hujjat Yaratilmoqda",
+                step1: "Ma'lumot izlash...",
+                step2: "Ma'lumotlarni hujjatga kiritish jarayoni...",
+                step3: "Dizaynni to'g'irlash va moslash...",
+                step4: "Yakuniy bosqich faylni yuklash...",
+                errSubject: "Fan nomini kiriting!",
+                errTopic: "Mavzu nomini kiriting!"
+            },
+            uz_cyrl: {
+                appTitle: "Академик Ишлар Яратиш",
+                appSubtitle: "Google Gemini ёрдамида реферат, слайд ва курс иши",
+                langLabel: "Тил / Language",
+                docTypeLabel: "Ҳужжат Турини Танланг",
+                docReferat: "Реферат",
+                descReferat: "10-15 бетли Word (.docx)",
+                docSlayd: "Слайд",
+                descSlayd: "5-30 саҳифа (.pptx)",
+                docKurs: "Курс иши",
+                descKurs: "40-60 бетли катта (.docx)",
+                adminTitle: "Админга мурожаат",
+                adminBtn: "Ёзиш",
+                infoLabel: "Маълумотлар",
+                subjectLabel: "Фан номи",
+                subjectPlaceholder: "Масалан: Иқтисодиёт, Тарих, Ҳуқуқ...",
+                topicLabel: "Мавзу номи",
+                topicPlaceholder: "Масалан: Рақамли иқтисодиётнинг ривожланиши...",
+                pagesLabel: "Саҳифалар сони",
+                slidesLabel: "Слайдлар сони",
+                designLabel: "Презентация дизайни",
+                designMin: "Минималист",
+                designCorp: "Корпоратив",
+                designCreat: "Креатив",
+                designDark: "Қоронғу",
+                generateBtn: "Яратиш",
+                progressTitle: "Ҳужжат Яратилмоқда",
+                step1: "Маълумот излаш...",
+                step2: "Маълумотларни ҳужжатга киритиш жараёни...",
+                step3: "Дизайнни тўғирлаш ва мослаш...",
+                step4: "Якуний босқич файлни юклаш...",
+                errSubject: "Фан номини киритинг!",
+                errTopic: "Мавзу номини киритинг!"
+            },
+            ru: {
+                appTitle: "Создание Академических Работ",
+                appSubtitle: "Рефераты, слайды и курсовые с помощью Google Gemini",
+                langLabel: "Язык / Language",
+                docTypeLabel: "Выберите Тип Документа",
+                docReferat: "Реферат",
+                descReferat: "10-15 страниц Word (.docx)",
+                docSlayd: "Слайды",
+                descSlayd: "5-30 слайдов (.pptx)",
+                docKurs: "Курсовая работа",
+                descKurs: "40-60 страниц Word (.docx)",
+                adminTitle: "Связь с администратором",
+                adminBtn: "Написать",
+                infoLabel: "Данные работы",
+                subjectLabel: "Название предмета",
+                subjectPlaceholder: "Например: Экономика, История, Право...",
+                topicLabel: "Название темы",
+                topicPlaceholder: "Например: Развитие цифровой экономики...",
+                pagesLabel: "Количество страниц",
+                slidesLabel: "Количество слайдов",
+                designLabel: "Дизайн презентации",
+                designMin: "Минималист",
+                designCorp: "Корпоративный",
+                designCreat: "Креативный",
+                designDark: "Тёмный",
+                generateBtn: "Создать",
+                progressTitle: "Документ создаётся",
+                step1: "Поиск информации...",
+                step2: "Внесение информации в документ...",
+                step3: "Настройка и оформление дизайна...",
+                step4: "Финальный этап загрузки файла...",
+                errSubject: "Введите название предмета!",
+                errTopic: "Введите название темы!"
+            },
+            kaa: {
+                appTitle: "Akademiyalıq Jumıslar Jaratıw",
+                appSubtitle: "Google Gemini járdeminde referat, slayd hám kurs jumısı",
+                langLabel: "Til / Language",
+                docTypeLabel: "Hújjet Túrin Saylań",
+                docReferat: "Referat",
+                descReferat: "10-15 betli Word (.docx)",
+                docSlayd: "Slayd",
+                descSlayd: "5-30 bet (.pptx)",
+                docKurs: "Kurs jumısı",
+                descKurs: "40-60 betli úlken (.docx)",
+                adminTitle: "Adminge múrájat",
+                adminBtn: "Jazıw",
+                infoLabel: "Maǵlıwmatlar",
+                subjectLabel: "Pán atı",
+                subjectPlaceholder: "Máselen: Ekonomika, Tariyx...",
+                topicLabel: "Tema atı",
+                topicPlaceholder: "Máselen: Sanlı ekonomikanıń rawajlanıwı...",
+                pagesLabel: "Betler sanı",
+                slidesLabel: "Slaydlar sanı",
+                designLabel: "Prezentatsiya dizaynı",
+                designMin: "Minimalist",
+                designCorp: "Korporativ",
+                designCreat: "Kreativ",
+                designDark: "Qarańǵı",
+                generateBtn: "Jaratıw",
+                progressTitle: "Hújjet Jaratılmaqta",
+                step1: "Maǵlıwmat izlew...",
+                step2: "Maǵlıwmatlardı hújjetke kirgiziw...",
+                step3: "Dizayndı durıslaw hám sáykeslestiriw...",
+                step4: "Juwmaqlawshı basqısh fayldı júklew...",
+                errSubject: "Pán atın kiritiń!",
+                errTopic: "Tema atın kiritiń!"
+            },
+            en: {
+                appTitle: "Generate Academic Works",
+                appSubtitle: "Essays, presentations and coursework powered by Google Gemini",
+                langLabel: "Language",
+                docTypeLabel: "Select Document Type",
+                docReferat: "Essay / Report",
+                descReferat: "10-15 pages Word (.docx)",
+                docSlayd: "Slides",
+                descSlayd: "5-30 slides (.pptx)",
+                docKurs: "Coursework",
+                descKurs: "40-60 pages Word (.docx)",
+                adminTitle: "Contact Admin",
+                adminBtn: "Message",
+                infoLabel: "Details",
+                subjectLabel: "Subject Name",
+                subjectPlaceholder: "e.g.: Economics, History, Computer Science...",
+                topicLabel: "Topic Name",
+                topicPlaceholder: "e.g.: Development of Digital Economy...",
+                pagesLabel: "Number of Pages",
+                slidesLabel: "Number of Slides",
+                designLabel: "Presentation Design",
+                designMin: "Minimalist",
+                designCorp: "Corporate",
+                designCreat: "Creative",
+                designDark: "Dark",
+                generateBtn: "Generate",
+                progressTitle: "Generating Document",
+                step1: "Searching information...",
+                step2: "Inserting data into document...",
+                step3: "Adjusting and applying design...",
+                step4: "Final step uploading file...",
+                errSubject: "Please enter the subject name!",
+                errTopic: "Please enter the topic name!"
+            }
+        };
+
+        // ==========================================
+        // STATE
+        // ==========================================
+        const state = {
+            lang: 'uz',
+            docType: 'referat',
+            subject: '',
+            topic: '',
+            pageCount: 15,
+            design: 'minimalist'
+        };
+
+        // Variantlar
+        const PAGE_OPTIONS = {
+            referat: [10, 11, 12, 13, 14, 15],
+            slayd: [5, 10, 15, 20, 30],
+            kurs_ishi: [40, 45, 50, 55, 60]
+        };
+
+        // DOM elementlar
+        const DOM = {
+            langGrid: document.getElementById('langGrid'),
+            docTypeGrid: document.getElementById('docTypeGrid'),
+            subjectInput: document.getElementById('subjectInput'),
+            topicInput: document.getElementById('topicInput'),
+            pageCountSection: document.getElementById('pageCountSection'),
+            pageCountLabel: document.getElementById('pageCountLabel'),
+            pagePillsGrid: document.getElementById('pagePillsGrid'),
+            designSection: document.getElementById('designSection'),
+            designGrid: document.getElementById('designGrid'),
+            generateBtn: document.getElementById('generateBtn'),
+            progressOverlay: document.getElementById('progressOverlay'),
+            progressDocInfo: document.getElementById('progressDocInfo'),
+            progressBarFill: document.getElementById('progressBarFill'),
+            step2Text: document.getElementById('step2Text'),
+            errorToast: document.getElementById('errorToast')
+        };
+
+        // ==========================================
+        // HAPTIC FEEDBACK
+        // ==========================================
+        function haptic(type = 'light') {
+            try {
+                if (tg?.HapticFeedback) {
+                    if (type === 'medium') tg.HapticFeedback.impactOccurred('medium');
+                    else if (type === 'success') tg.HapticFeedback.notificationOccurred('success');
+                    else if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
+                    else tg.HapticFeedback.impactOccurred('light');
+                }
+            } catch(e) {}
+        }
+
+        // ==========================================
+        // TOAST
+        // ==========================================
+        function showToast(msg) {
+            DOM.errorToast.textContent = msg;
+            DOM.errorToast.style.display = 'block';
+            haptic('error');
+            setTimeout(() => {
+                DOM.errorToast.style.display = 'none';
+            }, 3000);
+        }
+
+        // ==========================================
+        // RENDER PAGES SELECTOR
+        // ==========================================
+        function renderPageOptions() {
+            const options = PAGE_OPTIONS[state.docType] || [10];
+            DOM.pagePillsGrid.innerHTML = '';
+
+            // Default value agar mos kelmasa
+            if (!options.includes(state.pageCount)) {
+                state.pageCount = options[options.length - 1];
+            }
+
+            const t = I18N[state.lang];
+            DOM.pageCountLabel.textContent = state.docType === 'slayd' ? t.slidesLabel : t.pagesLabel;
+
+            options.forEach(num => {
+                const btn = document.createElement('button');
+                btn.className = 'pill-btn' + (num === state.pageCount ? ' active' : '');
+                btn.textContent = num;
+                btn.onclick = () => {
+                    DOM.pagePillsGrid.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    state.pageCount = num;
+                    haptic('light');
+                };
+                DOM.pagePillsGrid.appendChild(btn);
+            });
+
+            // Dizayn bloki faqat slayd uchun
+            DOM.designSection.style.display = state.docType === 'slayd' ? 'block' : 'none';
+        }
+
+        // ==========================================
+        // LANGUAGE UPDATE
+        // ==========================================
+        function setLanguage(lang) {
+            state.lang = lang;
+            const t = I18N[lang];
+            if (!t) return;
+
+            DOM.langGrid.querySelectorAll('.lang-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.lang === lang);
+            });
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const k = el.dataset.i18n;
+                if (t[k]) el.textContent = t[k];
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+                const k = el.dataset['i18nPlaceholder'];
+                if (t[k]) el.placeholder = t[k];
+            });
+
+            renderPageOptions();
+            haptic('light');
+        }
+
+        // ==========================================
+        // PROGRESS UI BOSQICHLARI
+        // ==========================================
+        async function runProgressAnimation(data) {
+            DOM.progressOverlay.style.display = 'flex';
+            const t = I18N[state.lang];
+
+            const typeNames = {
+                referat: t.docReferat,
+                slayd: t.docSlayd,
+                kurs_ishi: t.docKurs
+            };
+
+            const docName = typeNames[state.docType] || state.docType;
+            DOM.progressDocInfo.textContent = `${docName}: ${state.pageCount} ${state.docType === 'slayd' ? 'slayd' : 'bet'} • ${state.topic.slice(0, 25)}`;
+            DOM.step2Text.textContent = `${t.step2} (${docName})`;
+
+            // Bosqich 1: Ma'lumot izlash... (1.2 soniya)
+            DOM.progressBarFill.style.width = '25%';
+            await sleep(1200);
+            document.getElementById('step1').className = 'step-item completed';
+            document.getElementById('stepIcon1').textContent = '✅';
+
+            // Bosqich 2: Ma'lumotlarni hujjatga kiritish... (1.5 soniya)
+            document.getElementById('step2').className = 'step-item active';
+            DOM.progressBarFill.style.width = '55%';
+            haptic('light');
+            await sleep(1500);
+            document.getElementById('step2').className = 'step-item completed';
+            document.getElementById('stepIcon2').textContent = '✅';
+
+            // Bosqich 3: Dizaynni to'g'irlash va moslash... (1.2 soniya)
+            document.getElementById('step3').className = 'step-item active';
+            DOM.progressBarFill.style.width = '80%';
+            haptic('light');
+            await sleep(1200);
+            document.getElementById('step3').className = 'step-item completed';
+            document.getElementById('stepIcon3').textContent = '✅';
+
+            // Bosqich 4: Yakuniy bosqich faylni yuklash... (0.8 soniya)
+            document.getElementById('step4').className = 'step-item active';
+            DOM.progressBarFill.style.width = '100%';
+            haptic('success');
+            await sleep(800);
+            document.getElementById('step4').className = 'step-item completed';
+            document.getElementById('stepIcon4').textContent = '✅';
+
+            // Telegram botga yuborish
+            await sleep(400);
+            try {
+                if (tg?.sendData) {
+                    tg.sendData(JSON.stringify(data));
+                }
+            } catch(e) {
+                console.error("sendData error:", e);
+            }
+
+            // Oynani yopish
+            setTimeout(() => {
+                try { tg?.close(); } catch(e) {}
+            }, 500);
+        }
+
+        function sleep(ms) {
+            return new Promise(r => setTimeout(r, ms));
+        }
+
+        // ==========================================
+        // FORM SUBMIT
+        // ==========================================
+        function handleSubmit() {
+            const t = I18N[state.lang];
+            state.subject = DOM.subjectInput.value.trim();
+            state.topic = DOM.topicInput.value.trim();
+
+            if (!state.subject) {
+                showToast(t.errSubject);
+                DOM.subjectInput.focus();
+                return;
+            }
+
+            if (!state.topic) {
+                showToast(t.errTopic);
+                DOM.topicInput.focus();
+                return;
+            }
+
+            const langNames = {
+                uz: "O'zbek tilida",
+                uz_cyrl: "Ўзбек тилида (кирил)",
+                ru: "На русском языке",
+                kaa: "Qaraqalpaq tilinde",
+                en: "In English"
+            };
+
+            const data = {
+                action: "generate_document",
+                doc_type: state.docType,
+                language: state.lang,
+                language_name: langNames[state.lang] || "O'zbek tilida",
+                subject: state.subject,
+                topic: state.topic,
+                page_count: state.pageCount,
+                slide_count: state.pageCount,
+                design: state.design
+            };
+
+            haptic('medium');
+            runProgressAnimation(data);
+        }
+
+        // ==========================================
+        // EVENT LISTENERS
+        // ==========================================
+        DOM.langGrid.addEventListener('click', (e) => {
+            const btn = e.target.closest('.lang-btn');
+            if (btn) setLanguage(btn.dataset.lang);
+        });
+
+        DOM.docTypeGrid.addEventListener('click', (e) => {
+            const card = e.target.closest('.doc-type-card');
+            if (!card || card.classList.contains('admin-card')) return;
+
+            DOM.docTypeGrid.querySelectorAll('.doc-type-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            state.docType = card.dataset.type;
+
+            renderPageOptions();
+            haptic('light');
+        });
+
+        DOM.designGrid.addEventListener('click', (e) => {
+            const card = e.target.closest('.design-card');
+            if (!card) return;
+
+            DOM.designGrid.querySelectorAll('.design-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            state.design = card.dataset.design;
+            haptic('light');
+        });
+
+        DOM.generateBtn.addEventListener('click', handleSubmit);
+
+        // ==========================================
+        // INIT
+        // ==========================================
+        setLanguage('uz');
+        renderPageOptions();
+    </script>
 </body>
 </html>

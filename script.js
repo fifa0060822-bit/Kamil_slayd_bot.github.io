@@ -330,6 +330,11 @@ function sendDataToBot() {
             tg.sendData(JSON.stringify(data));
             showStatus(t.successSent, 'success');
             triggerHaptic('success');
+            setTimeout(() => {
+                try {
+                    tg.close();
+                } catch (e) {}
+            }, 600);
         } else {
             // Fallback: log to console for testing outside Telegram
             console.log('📊 Presentation Data:', JSON.stringify(data, null, 2));
