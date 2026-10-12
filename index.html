@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Prezentatsiya Yaratish</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="app-container" id="app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="8" y1="21" x2="16" y2="21"></line>
+                    <line x1="12" y1="17" x2="12" y2="21"></line>
+                </svg>
+            </div>
+            <h1 class="header-title" data-i18n="appTitle">Prezentatsiya Yaratish</h1>
+            <p class="header-subtitle" data-i18n="appSubtitle">AI yordamida professional taqdimotlar</p>
+        </header>
+
+        <!-- Language Selector -->
+        <section class="form-section">
+            <label class="form-label" data-i18n="langLabel">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
+                Til / Язык
+            </label>
+            <div class="lang-buttons" id="langButtons">
+                <button class="lang-btn active" data-lang="uz">O'zbek</button>
+                <button class="lang-btn" data-lang="uz_cyrl">Ўзбек</button>
+                <button class="lang-btn" data-lang="ru">Русский</button>
+                <button class="lang-btn" data-lang="kaa">Qaraqalpaq</button>
+                <button class="lang-btn" data-lang="en">English</button>
+            </div>
+        </section>
+
+        <!-- Subject Name -->
+        <section class="form-section">
+            <label class="form-label" for="subjectInput" data-i18n="subjectLabel">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                Fan nomi
+            </label>
+            <input type="text" id="subjectInput" class="form-input" data-i18n-placeholder="subjectPlaceholder" placeholder="Masalan: Tarix, Informatika..." autocomplete="off">
+        </section>
+
+        <!-- Topic Name -->
+        <section class="form-section">
+            <label class="form-label" for="topicInput" data-i18n="topicLabel">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="17" y1="10" x2="3" y2="10"></line>
+                    <line x1="21" y1="6" x2="3" y2="6"></line>
+                    <line x1="21" y1="14" x2="3" y2="14"></line>
+                    <line x1="17" y1="18" x2="3" y2="18"></line>
+                </svg>
+                Mavzu nomi
+            </label>
+            <input type="text" id="topicInput" class="form-input" data-i18n-placeholder="topicPlaceholder" placeholder="Masalan: Sun'iy intellektning kelajagi..." autocomplete="off">
+        </section>
+
+        <!-- Slide Count -->
+        <section class="form-section">
+            <label class="form-label" data-i18n="slidesLabel">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                </svg>
+                Slaydlar soni
+            </label>
+            <div class="slide-buttons" id="slideButtons">
+                <button class="slide-btn" data-count="5">5</button>
+                <button class="slide-btn active" data-count="10">10</button>
+                <button class="slide-btn" data-count="15">15</button>
+                <button class="slide-btn" data-count="20">20</button>
+                <button class="slide-btn" data-count="30">30</button>
+            </div>
+        </section>
+
+        <!-- Design Selection -->
+        <section class="form-section">
+            <label class="form-label" data-i18n="designLabel">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                    <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                    <path d="M2 2l7.586 7.586"></path>
+                    <circle cx="11" cy="11" r="2"></circle>
+                </svg>
+                Dizayn turi
+            </label>
+            <div class="design-grid" id="designGrid">
+                <div class="design-card active" data-design="minimalist">
+                    <div class="design-preview minimalist-preview">
+                        <div class="preview-line long"></div>
+                        <div class="preview-line medium"></div>
+                        <div class="preview-line short"></div>
+                    </div>
+                    <span class="design-name" data-i18n="designMinimalist">Minimalist</span>
+                </div>
+                <div class="design-card" data-design="corporate">
+                    <div class="design-preview corporate-preview">
+                        <div class="preview-bar"></div>
+                        <div class="preview-line long"></div>
+                        <div class="preview-line medium"></div>
+                    </div>
+                    <span class="design-name" data-i18n="designCorporate">Korporativ</span>
+                </div>
+                <div class="design-card" data-design="creative">
+                    <div class="design-preview creative-preview">
+                        <div class="preview-circle"></div>
+                        <div class="preview-line short"></div>
+                        <div class="preview-line medium"></div>
+                    </div>
+                    <span class="design-name" data-i18n="designCreative">Kreativ</span>
+                </div>
+                <div class="design-card" data-design="dark">
+                    <div class="design-preview dark-preview">
+                        <div class="preview-line long"></div>
+                        <div class="preview-line short"></div>
+                        <div class="preview-line medium"></div>
+                    </div>
+                    <span class="design-name" data-i18n="designDark">Qorong'u</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generate Button -->
+        <section class="form-section generate-section">
+            <button class="generate-btn" id="generateBtn" data-i18n="generateBtn">
+                <span class="btn-text">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                    Yaratish
+                </span>
+                <span class="btn-loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <span data-i18n="generating">Yaratilmoqda...</span>
+                </span>
+            </button>
+        </section>
+
+        <!-- Status Message -->
+        <div class="status-message" id="statusMessage" style="display: none;"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
